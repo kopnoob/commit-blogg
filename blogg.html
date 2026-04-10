@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blogg — Commit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #2B5C96;
+      --blue-light: #EBF1F9;
+      --blue-mid:   #3A6BAD;
+      --ink:        #1A1A1A;
+      --ink-mid:    #3D3D3D;
+      --ink-soft:   #666666;
+      --line:       #E0E0E0;
+      --bg:         #F7F6F3;
+      --white:      #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--ink);
+      background: var(--white);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAVBAR ── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .nav-wrap {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo-img { height: 28px; width: auto; display: block; }
+    nav { display: flex; align-items: center; gap: 2rem; }
+    nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ink-mid);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    nav a:hover { color: var(--blue); }
+    .nav-btn {
+      border: 1.5px solid var(--blue) !important;
+      color: var(--blue) !important;
+      padding: 0.35rem 1rem;
+      border-radius: 5px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .nav-btn:hover {
+      background: var(--blue) !important;
+      color: var(--white) !important;
+    }
+
+    /* ── BLOGG HERO ── */
+    .blogg-hero {
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+      padding: 4rem 2rem 3.5rem;
+      text-align: center;
+    }
+    .blogg-hero h1 {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 3rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.3px;
+    }
+    .blogg-hero p {
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── BLOGG GRID ── */
+    .blogg-wrap {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+    .blogg-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    /* ── BLOGG KORT ── */
+    .blogg-card {
+      display: block;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .blogg-card:hover {
+      border-color: var(--blue);
+      box-shadow: 0 4px 16px rgba(43, 92, 150, 0.08);
+    }
+    .card-thumb {
+      width: 100%;
+      aspect-ratio: 16/8;
+      object-fit: cover;
+      display: block;
+    }
+    .card-body {
+      padding: 1.5rem 2rem 2rem;
+    }
+    .card-kicker {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.65rem;
+    }
+    .card-title {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--ink);
+      margin-bottom: 0.85rem;
+    }
+    .card-ingress {
+      font-size: 0.93rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      margin-bottom: 1.25rem;
+    }
+    .card-meta {
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .card-meta-dot { color: var(--line); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--line);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+    }
+
+    @media (max-width: 900px) {
+      .blogg-grid { grid-template-columns: 1fr; }
+      .blogg-hero h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header>
+  <div class="nav-wrap">
+    <img src="commit_logo.png" alt="Commit" class="logo-img" />
+    <nav>
+      <a href="#">Hvem er vi</a>
+      <a href="blogg.html">Blogg</a>
+      <a href="#" class="nav-btn">Kontakt oss</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="blogg-hero">
+  <h1>Blogg</h1>
+  <p>Tanker og erfaringer fra hverdagen hos Commit</p>
+</div>
+
+<!-- INNLEGG -->
+<div class="blogg-wrap">
+  <div class="blogg-grid">
+
+    <a href="blogg-preview.html" class="blogg-card">
+      <img src="thumb_tilbud.jpg" alt="" class="card-thumb" />
+      <div class="card-body">
+        <div class="card-kicker">Claude Code i praksis</div>
+        <div class="card-title">Femten minutter fra forespørsel til klart tilbud</div>
+        <p class="card-ingress">Vi fikk en forespørsel i Mercell en tirsdag. Vi ga Claude én instruksjon. Femten minutter senere var tilbudet klart for kvalitetssikring.</p>
+        <div class="card-meta">
+          <span>10. april 2026</span>
+          <span class="card-meta-dot">·</span>
+          <span>8 min</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="blogg-bugfix.html" class="blogg-card">
+      <img src="thumb_bugfix.jpg" alt="" class="card-thumb" />
+      <div class="card-body">
+        <div class="card-kicker">Utvikling</div>
+        <div class="card-title">Bugfix fra A til Å med Claude Code og Jira</div>
+        <p class="card-ingress">En bug kom inn som Jira-issue en mandag morgen. Innen lunsj var den fikset, testet og issue-en lukket, uten at utvikleren måtte klikke seg rundt i tre ulike verktøy.</p>
+        <div class="card-meta">
+          <span>8. april 2026</span>
+          <span class="card-meta-dot">·</span>
+          <span>6 min</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="blogg-datavask.html" class="blogg-card">
+      <img src="thumb_datavask.jpg" alt="" class="card-thumb" />
+      <div class="card-body">
+        <div class="card-kicker">Data</div>
+        <div class="card-title">Datavask i praksis: fra rådata til strukturert informasjon</div>
+        <p class="card-ingress">Vi fikk levert en Excel-fil med 4 000 rader og tre forskjellige datoformater. Å rydde opp tok en halvtime, mesteparten av det en kaffekopp.</p>
+        <div class="card-meta">
+          <span>5. april 2026</span>
+          <span class="card-meta-dot">·</span>
+          <span>5 min</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="blogg-hooks.html" class="blogg-card">
+      <img src="thumb_hooks.jpg" alt="" class="card-thumb" />
+      <div class="card-body">
+        <div class="card-kicker">Sikkerhet</div>
+        <div class="card-title">PII-skanning og audit-logging med Claude Hooks</div>
+        <p class="card-ingress">Hooks er den minst omtalte delen av Claude Code. De er også den delen som gjør det mulig å bruke Claude trygt i produksjonsnære miljøer.</p>
+        <div class="card-meta">
+          <span>1. april 2026</span>
+          <span class="card-meta-dot">·</span>
+          <span>7 min</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>©2026 Commit AS, org.nr 934&nbsp;427&nbsp;688</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bugfix fra A til Å med Claude Code og Jira — Commit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #2B5C96;
+      --blue-light: #EBF1F9;
+      --blue-mid:   #3A6BAD;
+      --ink:        #1A1A1A;
+      --ink-mid:    #3D3D3D;
+      --ink-soft:   #666666;
+      --line:       #E0E0E0;
+      --bg:         #F7F6F3;
+      --white:      #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--ink);
+      background: var(--white);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAVBAR ── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .nav-wrap {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo-img { height: 28px; width: auto; display: block; }
+    nav { display: flex; align-items: center; gap: 2rem; }
+    nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ink-mid);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    nav a:hover { color: var(--blue); }
+    .nav-btn {
+      border: 1.5px solid var(--blue) !important;
+      color: var(--blue) !important;
+      padding: 0.35rem 1rem;
+      border-radius: 5px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .nav-btn:hover {
+      background: var(--blue) !important;
+      color: var(--white) !important;
+    }
+
+    /* ── BLOGG-HEADER-STRIP ── */
+    .blog-strip {
+      border-bottom: 1px solid var(--line);
+      background: var(--bg);
+    }
+    .blog-strip-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0.6rem 2rem;
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .blog-strip a { color: var(--ink-soft); text-decoration: none; }
+    .blog-strip a:hover { color: var(--blue); text-decoration: underline; }
+    .crumb-sep { color: var(--line); font-size: 0.9rem; }
+
+    /* ── ARTICLE LAYOUT ── */
+    .article-grid {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    /* ── MAIN COLUMN ── */
+    .article-main {}
+
+    .article-kicker {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.75rem;
+    }
+
+    .article-title {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.3px;
+    }
+
+    .article-intro {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      border-left: 3px solid var(--blue);
+      padding-left: 1.1rem;
+      margin-bottom: 2rem;
+      font-style: italic;
+      font-family: 'Lora', Georgia, serif;
+    }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 2.5rem;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+    }
+    .meta-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .meta-name { font-weight: 500; color: var(--ink); }
+    .meta-dot { color: var(--line); }
+
+    /* ── TERMINAL BLOCK ── */
+    .terminal {
+      background: #1C2333;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 2.5rem 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    }
+    .terminal-bar {
+      background: #2A3347;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #FF5F57; }
+    .dot-y { background: #FEBC2E; }
+    .dot-g { background: #28C840; }
+    .terminal-label {
+      font-family: 'Inter', monospace;
+      font-size: 0.75rem;
+      color: #8892A4;
+      margin-left: auto;
+    }
+    .terminal-body {
+      padding: 1.25rem 1.5rem;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.82rem;
+      line-height: 2;
+    }
+    .t-prompt { color: #4ADE80; }
+    .t-cmd { color: #E2E8F0; }
+    .t-comment { color: #64748B; }
+    .t-out { color: #94A3B8; }
+    .t-ok { color: #4ADE80; }
+    .t-step { color: #7DD3FC; }
+
+    /* ── PROSE ── */
+    .prose h2 {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin: 2.75rem 0 0.85rem;
+      padding-top: 2.75rem;
+      border-top: 1px solid var(--line);
+    }
+    .prose h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+    .prose p {
+      font-size: 1.02rem;
+      line-height: 1.8;
+      color: var(--ink-mid);
+      margin-bottom: 1.4rem;
+    }
+    .prose p strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .prose ul {
+      margin: 0.5rem 0 1.5rem 0;
+      padding: 0;
+      list-style: none;
+    }
+    .prose ul li {
+      font-size: 1.02rem;
+      line-height: 1.8;
+      color: var(--ink-mid);
+      padding: 0.3rem 0 0.3rem 1.4rem;
+      position: relative;
+    }
+    .prose ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.8rem;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      margin: 2.5rem 0;
+      padding: 1.5rem 1.75rem;
+      background: var(--blue-light);
+      border-radius: 6px;
+    }
+    .pull-quote p {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.15rem;
+      line-height: 1.65;
+      color: var(--blue);
+      font-style: italic;
+      margin: 0;
+    }
+
+    /* ── STEP LIST ── */
+    .step-list {
+      margin: 1.5rem 0 2rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .step-item {
+      display: flex;
+      gap: 1.1rem;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--line);
+      align-items: flex-start;
+    }
+    .step-item:last-child { border-bottom: none; }
+    .step-num {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.1rem;
+    }
+    .step-text {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--ink-mid);
+    }
+    .step-text strong { color: var(--ink); font-weight: 600; }
+
+    /* ── CTA BOX ── */
+    .cta-box {
+      margin: 2.5rem 0 0;
+      padding: 1.5rem 1.75rem;
+      border: 1.5px solid var(--blue);
+      border-radius: 8px;
+    }
+    .cta-box p {
+      font-size: 0.97rem;
+      color: var(--ink-mid);
+      margin-bottom: 0.75rem;
+    }
+    .cta-box p:last-child { margin-bottom: 0; }
+    .cta-box a {
+      color: var(--blue);
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .cta-box a:hover { text-decoration: underline; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { position: sticky; top: 80px; }
+
+    .sidebar-section {
+      margin-bottom: 2rem;
+    }
+    .sidebar-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .toc { list-style: none; }
+    .toc li { margin-bottom: 0.6rem; }
+    .toc a {
+      font-size: 0.83rem;
+      line-height: 1.4;
+      color: var(--ink-soft);
+      text-decoration: none;
+      display: block;
+      padding: 0.2rem 0 0.2rem 0.75rem;
+      border-left: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .toc a:hover {
+      color: var(--blue);
+      border-left-color: var(--blue);
+    }
+
+    .tag-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--blue);
+      background: var(--blue-light);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+    .tag:hover { background: #D6E5F5; }
+
+    .sidebar-author p {
+      font-size: 0.83rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+    .sidebar-author strong { color: var(--ink); font-weight: 600; }
+
+    /* ── RELATED ── */
+    .related-section {
+      border-top: 2px solid var(--ink);
+      margin: 0;
+      padding: 3rem 2rem 4rem;
+      background: var(--bg);
+    }
+    .related-inner { max-width: 1160px; margin: 0 auto; }
+    .related-inner h3 {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.75rem;
+      color: var(--ink);
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .related-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: border-color 0.15s;
+    }
+    .related-card:hover { border-color: var(--blue); }
+    .related-card .rc-kicker {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.5rem;
+    }
+    .related-card h4 {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+    }
+    .related-card span {
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--line);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+    }
+
+    @media (max-width: 900px) {
+      .article-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .sidebar { position: static; }
+      .related-grid { grid-template-columns: 1fr; }
+      .article-title { font-size: 1.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header>
+  <div class="nav-wrap">
+    <img src="commit_logo.png" alt="Commit" class="logo-img" />
+    <nav>
+      <a href="#">Hvem er vi</a>
+      <a href="blogg.html">Blogg</a>
+      <a href="#" class="nav-btn">Kontakt oss</a>
+    </nav>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="blog-strip">
+  <div class="blog-strip-inner">
+    <a href="#">Hjem</a>
+    <span class="crumb-sep">›</span>
+    <a href="blogg.html">Blogg</a>
+    <span class="crumb-sep">›</span>
+    <span>Bugfix fra A til Å med Claude Code og Jira</span>
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="article-grid">
+
+  <!-- ARTICLE MAIN -->
+  <article class="article-main">
+
+    <p class="article-kicker">Utvikling</p>
+
+    <h1 class="article-title">Bugfix fra A til Å med Claude Code og Jira</h1>
+
+    <p class="article-intro">En bug kom inn som Jira-issue en mandag morgen. Innen lunsj var den fikset, testet og issue-en lukket, uten at utvikleren måtte klikke seg rundt i tre ulike verktøy.</p>
+
+    <div class="article-meta">
+      <img src="photo_tomas.jpg" alt="Tomas Johansen" style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+      <span class="meta-name">Tomas Johansen</span>
+      <span class="meta-dot">·</span>
+      <span>8. april 2026</span>
+      <span class="meta-dot">·</span>
+      <span>6 min</span>
+    </div>
+
+    <figure style="margin:0 0 2.5rem;border-radius:8px;overflow:hidden;border:1px solid var(--line);">
+      <img src="hero_bugfix.png" alt="Terminal som viser Claude Code analysere og fikse en bug fra Jira-issue til ferdig PR" style="width:100%;display:block;" />
+      <figcaption style="font-size:0.78rem;color:var(--ink-soft);padding:0.6rem 0.85rem;background:var(--bg);border-top:1px solid var(--line);">Claude leser issue fra Jira, lokaliserer rotårsaken i koden, skriver en test og oppretter PR. Alt i én operasjon.</figcaption>
+    </figure>
+
+    <div class="prose">
+
+      <h2 id="kontekstbytte">Fra issue til fix uten kontekstbytte</h2>
+
+      <p>En vanlig arbeidsdag innebærer mange verktøy: Jira for oppgaver, editor for kode, terminal for kjøring og testing. Hver gang du bytter mellom dem mister du litt momentum. Du leser en issue, åpner editoren, prøver å huske hva du nettopp leste, og begynner å lete i koden.</p>
+
+      <p>Med Claude koblet til Jira via MCP forsvinner mye av det. Du beskriver problemet én gang, og Claude tar seg av resten av flyten.</p>
+
+      <ul>
+        <li>Å bytte mellom Jira, editor og terminal er ikke bare tidkrevende, det bryter flyten</li>
+        <li>Med Claude koblet til Jira kan du beskrive problemet én gang</li>
+        <li>Claude leser issue-en, navigerer i koden og foreslår en fix</li>
+      </ul>
+
+      <h2 id="hva-claude-gjor">Hva Claude faktisk gjør</h2>
+
+      <p>Når du ber Claude se på en bug-issue, kobler den seg til Jira via MCP og leser beskrivelsen og alle kommentarer. Deretter begynner den å lete i kodebasen, ikke tilfeldig, men målrettet basert på nøkkelord og feilmeldinger fra issue-en.</p>
+
+      <!-- TERMINAL -->
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="terminal-label">claude — prosjekt</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">$</span> <span class="t-cmd">claude "Se på BUG-482 i Jira og fiks den"</span></div>
+        <div><span class="t-step">  → Kobler til Jira MCP...</span></div>
+        <div><span class="t-out">  ✓ Lest BUG-482: NullPointerException i PaymentService.processRefund()</span></div>
+        <div><span class="t-step">  → Søker i kodebase: PaymentService, processRefund...</span></div>
+        <div><span class="t-out">  ✓ Fant: src/services/PaymentService.java, linje 147</span></div>
+        <div><span class="t-step">  → Oppretter branch: fix/BUG-482-payment-null-check</span></div>
+        <div><span class="t-ok">  ✓ Branch opprettet</span></div>
+        <div><span class="t-step">  → Implementerer fix og kjører tester...</span></div>
+        <div><span class="t-out">  ✓ 12/12 tester bestått</span></div>
+        <div><span class="t-step">  → Oppretter PR og linker til BUG-482...</span></div>
+        <div><span class="t-ok">  ✓ PR opprettet: github.com/commit/prosjekt/pull/391</span></div>
+      </div>
+    </div>
+
+    <div class="prose">
+
+      <p>Trinnene er konsistente fra gang til gang:</p>
+
+      <ul>
+        <li>Kobler seg til Jira-issue via MCP, leser beskrivelse og kommentarer</li>
+        <li>Søker i kodebasen etter relevant kode med grep og fillesing</li>
+        <li>Lager en ny branch automatisk med et beskrivende navn</li>
+        <li>Implementerer fix og skriver en kort PR-beskrivelse</li>
+        <li>Kjører tester lokalt om de finnes</li>
+        <li>Oppretter PR og linker den til Jira-issue-en</li>
+      </ul>
+
+      <h2 id="hva-vi-holder">Hva vi holder selv</h2>
+
+      <p>Det er et par ting som ikke kan automatiseres bort, og det er greit. Noen vurderinger skal sitte hos et menneske.</p>
+
+      <ul>
+        <li>Utvikleren leser og godkjenner kodeendringen</li>
+        <li>Faglig vurdering av om løsningen faktisk er riktig</li>
+        <li>Kontekst som ikke står i issue-en: historikk, designbeslutninger, kjent teknisk gjeld</li>
+      </ul>
+
+      <p>Å trykke "merge" er et bevisst valg. Claude lager PR-en, men du bestemmer om den går inn.</p>
+
+      <div class="pull-quote">
+        <p>Verktøyet gjør ikke faglig vurdering for deg. Det fjerner friksjon slik at du kan bruke mer tid på det som krever din kunnskap.</p>
+      </div>
+
+      <h2 id="viktig-detalj">En liten men viktig detalj</h2>
+
+      <p>Claude skriver kode vi fortsatt er ansvarlige for. Det er lett å glemme når den ser riktig ut og testene er grønne.</p>
+
+      <ul>
+        <li>Claude skriver kode vi fortsatt er ansvarlige for</li>
+        <li>Vi ser alltid over PR-en før merge</li>
+        <li>Vibe-koding, det vil si å la AI skrive kode du ikke forstår, er en snarvei som skaper teknisk gjeld</li>
+      </ul>
+
+      <p>Vi bruker Claude som en effektiv kollega, ikke som en svart boks. Resultatet er bedre kode og kortere tid fra bug til fix, men ansvaret er fremdeles vårt.</p>
+
+      <div class="cta-box">
+        <p>Vil du sette opp Claude med Jira i din organisasjon? Vi hjelper gjerne med MCP-konfigurasjon og arbeidsflyt.</p>
+        <p>Ta kontakt: <a href="mailto:kopstad@commit.no">kopstad@commit.no</a></p>
+      </div>
+
+    </div>
+
+    <div style="margin-top:2.5rem;padding:1.25rem 1.5rem;border:1px solid var(--line);border-radius:8px;background:var(--bg);">
+      <div class="author-card-inner" style="display:flex;gap:1rem;align-items:flex-start;">
+        <img src="photo_tomas.jpg" alt="Tomas Johansen" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+        <div class="author-info">
+          <h4 style="font-size:0.95rem;font-weight:600;color:var(--ink);margin-bottom:0.35rem;">Tomas Johansen</h4>
+          <p style="font-size:0.83rem;line-height:1.6;color:var(--ink-soft);margin:0;">Senior Consultant i Commit AS. Bakgrunn fra embedded systems og fullstack-utvikling hos Kongsberg og Cloudberries.</p>
+        </div>
+      </div>
+    </div>
+
+  </article>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Innhold</div>
+      <ul class="toc">
+        <li><a href="#kontekstbytte">Fra issue til fix uten kontekstbytte</a></li>
+        <li><a href="#hva-claude-gjor">Hva Claude faktisk gjør</a></li>
+        <li><a href="#hva-vi-holder">Hva vi holder selv</a></li>
+        <li><a href="#viktig-detalj">En liten men viktig detalj</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Temaer</div>
+      <div class="tag-list">
+        <a href="#" class="tag">Claude Code</a>
+        <a href="#" class="tag">Jira</a>
+        <a href="#" class="tag">MCP</a>
+        <a href="#" class="tag">Utvikling</a>
+        <a href="#" class="tag">Bugfix</a>
+        <a href="#" class="tag">Arbeidsflyt</a>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Om forfatteren</div>
+      <div class="sidebar-author">
+        <p><strong>Tomas Johansen</strong><br/>Senior Consultant, Commit AS</p>
+        <p>Bakgrunn fra embedded systems og fullstack-utvikling. Jobber med systemutvikling og integrasjoner.</p>
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+
+<!-- RELATED -->
+<div class="related-section">
+  <div class="related-inner">
+    <h3>Mer fra bloggen</h3>
+    <div class="related-grid">
+      <a href="blogg-preview.html" class="related-card">
+        <div class="rc-kicker">Claude Code i praksis</div>
+        <h4>Femten minutter fra forespørsel til klart tilbud</h4>
+        <span>10. april 2026</span>
+      </a>
+      <a href="blogg-datavask.html" class="related-card">
+        <div class="rc-kicker">Data</div>
+        <h4>Datavask i praksis: fra rådata til strukturert informasjon</h4>
+        <span>5. april 2026</span>
+      </a>
+      <a href="blogg-hooks.html" class="related-card">
+        <div class="rc-kicker">Sikkerhet</div>
+        <h4>PII-skanning og audit-logging med Claude Hooks</h4>
+        <span>1. april 2026</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>©2026 Commit AS, org.nr 934&nbsp;427&nbsp;688</p>
+</footer>
+
+</body>
+</html>
