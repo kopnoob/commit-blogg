@@ -27,7 +27,7 @@
     body {
       font-family: 'Inter', sans-serif;
       color: var(--ink);
-      background: var(--white);
+      background: var(--bg);
       font-size: 17px;
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
@@ -75,7 +75,7 @@
 
     /* ── BLOGG HERO ── */
     .blogg-hero {
-      background: var(--bg);
+      background: var(--white);
       border-bottom: 1px solid var(--line);
       padding: 4rem 2rem 3.5rem;
       text-align: center;
@@ -99,93 +99,108 @@
     .blogg-wrap {
       max-width: 1160px;
       margin: 0 auto;
-      padding: 4rem 2rem 6rem;
+      padding: 3.5rem 2rem 6rem;
     }
     .blogg-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
+      gap: 1.5px;
+      background: var(--line);
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
     }
 
     /* ── BLOGG KORT ── */
     .blogg-card {
-      display: block;
-      position: relative;
-      aspect-ratio: 3/4;
-      border-radius: 10px;
-      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+      padding: 2.25rem 2.5rem 2rem;
       text-decoration: none;
       color: inherit;
-      background: #dedad3;
-      transition: transform 0.18s, box-shadow 0.18s;
+      transition: background 0.15s;
     }
     .blogg-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(20, 30, 60, 0.14);
+      background: #fafaf8;
     }
-    .card-thumb {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center top;
-    }
-    .card-body {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 3rem 1.5rem 1.5rem;
-      background: linear-gradient(
-        to top,
-        rgba(12, 18, 38, 0.96) 0%,
-        rgba(12, 18, 38, 0.82) 45%,
-        rgba(12, 18, 38, 0.35) 75%,
-        transparent 100%
-      );
-    }
+
     .card-kicker {
       font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.09em;
+      font-weight: 700;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.6);
-      margin-bottom: 0.5rem;
+      color: var(--blue);
+      margin-bottom: 1rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
       flex-wrap: wrap;
     }
     .serie-badge {
-      background: rgba(255, 255, 255, 0.12);
-      color: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: var(--blue-light);
+      color: var(--blue);
+      border: 1px solid #C2D8F0;
       border-radius: 10px;
-      font-size: 0.62rem;
+      font-size: 0.6rem;
       font-weight: 700;
       letter-spacing: 0.05em;
       padding: 1px 7px;
       text-transform: uppercase;
     }
+
     .card-title {
       font-family: 'Lora', Georgia, serif;
-      font-size: 1.15rem;
+      font-size: 1.55rem;
       font-weight: 600;
-      line-height: 1.3;
-      color: #ffffff;
-      margin-bottom: 0.65rem;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      letter-spacing: -0.2px;
     }
-    .card-ingress { display: none; }
-    .card-meta {
-      font-size: 0.75rem;
-      color: rgba(255, 255, 255, 0.5);
+    .blogg-card:hover .card-title {
+      color: var(--blue-mid);
+    }
+
+    .card-ingress {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ── BYLINE ── */
+    .card-byline {
       display: flex;
-      gap: 0.6rem;
       align-items: center;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--line);
     }
-    .card-meta-dot { color: rgba(255, 255, 255, 0.25); }
+    .card-byline img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      flex-shrink: 0;
+      border: 1.5px solid var(--line);
+    }
+    .card-byline-text {
+      font-size: 0.78rem;
+      line-height: 1.45;
+      color: var(--ink-soft);
+    }
+    .card-byline-name {
+      font-weight: 600;
+      color: var(--ink-mid);
+      display: block;
+    }
 
     /* ── FOOTER ── */
     footer {
@@ -197,9 +212,10 @@
       color: var(--ink-soft);
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 760px) {
       .blogg-grid { grid-template-columns: 1fr; }
       .blogg-hero h1 { font-size: 2.2rem; }
+      .card-title { font-size: 1.3rem; }
     }
   </style>
 </head>
@@ -228,57 +244,53 @@
   <div class="blogg-grid">
 
     <a href="blogg-preview.html" class="blogg-card">
-      <img src="photo_oystein.jpg" alt="" class="card-thumb" />
-      <div class="card-body">
-        <div class="card-kicker">Claude Code i praksis <span class="serie-badge">Del 1</span></div>
-        <div class="card-title">Femten minutter fra forespørsel til klart tilbud</div>
-        <p class="card-ingress">Vi fikk en forespørsel i Mercell en tirsdag. Vi ga Claude én instruksjon. Femten minutter senere var tilbudet klart for kvalitetssikring.</p>
-        <div class="card-meta">
-          <span>10. april 2026</span>
-          <span class="card-meta-dot">·</span>
-          <span>8 min</span>
+      <div class="card-kicker">Claude Code i praksis <span class="serie-badge">Del 1</span></div>
+      <div class="card-title">Femten minutter fra forespørsel til klart tilbud</div>
+      <p class="card-ingress">Vi fikk en forespørsel i Mercell en tirsdag. Vi ga Claude én instruksjon. Femten minutter senere var tilbudet klart for kvalitetssikring.</p>
+      <div class="card-byline">
+        <img src="photo_oystein.jpg" alt="Øystein Kopstad" />
+        <div class="card-byline-text">
+          <span class="card-byline-name">Øystein Kopstad</span>
+          10. april 2026 · 8 min
         </div>
       </div>
     </a>
 
     <a href="blogg-bugfix.html" class="blogg-card">
-      <img src="photo_tomas.jpg" alt="" class="card-thumb" />
-      <div class="card-body">
-        <div class="card-kicker">Claude Code i praksis <span class="serie-badge">Del 2</span></div>
-        <div class="card-title">Bugfix fra A til Å med Claude Code og Jira</div>
-        <p class="card-ingress">En bug kom inn som Jira-issue en mandag morgen. Innen lunsj var den fikset, testet og issue-en lukket, uten at utvikleren måtte klikke seg rundt i tre ulike verktøy.</p>
-        <div class="card-meta">
-          <span>8. april 2026</span>
-          <span class="card-meta-dot">·</span>
-          <span>6 min</span>
+      <div class="card-kicker">Claude Code i praksis <span class="serie-badge">Del 2</span></div>
+      <div class="card-title">Bugfix fra A til Å med Claude Code og Jira</div>
+      <p class="card-ingress">En bug kom inn som Jira-issue en mandag morgen. Innen lunsj var den fikset, testet og issue-en lukket, uten at utvikleren måtte klikke seg rundt i tre ulike verktøy.</p>
+      <div class="card-byline">
+        <img src="photo_tomas.jpg" alt="Tomas Johansen" />
+        <div class="card-byline-text">
+          <span class="card-byline-name">Tomas Johansen</span>
+          8. april 2026 · 6 min
         </div>
       </div>
     </a>
 
     <a href="blogg-datavask.html" class="blogg-card">
-      <img src="photo_loc.png" alt="" class="card-thumb" />
-      <div class="card-body">
-        <div class="card-kicker">Claude Code i praksis <span class="serie-badge">Del 3</span></div>
-        <div class="card-title">Datavask i praksis: fra rådata til strukturert informasjon</div>
-        <p class="card-ingress">Vi fikk levert en Excel-fil med 4 000 rader og tre forskjellige datoformater. Å rydde opp tok en halvtime, mesteparten av det en kaffekopp.</p>
-        <div class="card-meta">
-          <span>5. april 2026</span>
-          <span class="card-meta-dot">·</span>
-          <span>5 min</span>
+      <div class="card-kicker">Claude Code i praksis <span class="serie-badge">Del 3</span></div>
+      <div class="card-title">Datavask i praksis: fra rådata til strukturert informasjon</div>
+      <p class="card-ingress">Vi fikk levert en Excel-fil med 4 000 rader og tre forskjellige datoformater. Å rydde opp tok en halvtime, mesteparten av det en kaffekopp.</p>
+      <div class="card-byline">
+        <img src="photo_loc.png" alt="Loc Cao Do" />
+        <div class="card-byline-text">
+          <span class="card-byline-name">Loc Cao Do</span>
+          5. april 2026 · 5 min
         </div>
       </div>
     </a>
 
     <a href="blogg-hooks.html" class="blogg-card">
-      <img src="photo_oystein.jpg" alt="" class="card-thumb" />
-      <div class="card-body">
-        <div class="card-kicker">Sikkerhet</div>
-        <div class="card-title">PII-skanning og audit-logging med Claude Hooks</div>
-        <p class="card-ingress">Hooks er den minst omtalte delen av Claude Code. De er også den delen som gjør det mulig å bruke Claude trygt i produksjonsnære miljøer.</p>
-        <div class="card-meta">
-          <span>1. april 2026</span>
-          <span class="card-meta-dot">·</span>
-          <span>7 min</span>
+      <div class="card-kicker">Sikkerhet</div>
+      <div class="card-title">PII-skanning og audit-logging med Claude Hooks</div>
+      <p class="card-ingress">Hooks er den minst omtalte delen av Claude Code. De er også den delen som gjør det mulig å bruke Claude trygt i produksjonsnære miljøer.</p>
+      <div class="card-byline">
+        <img src="photo_oystein.jpg" alt="Øystein Kopstad" />
+        <div class="card-byline-text">
+          <span class="card-byline-name">Øystein Kopstad</span>
+          1. april 2026 · 7 min
         </div>
       </div>
     </a>
