@@ -124,14 +124,10 @@
     }
     .card-thumb {
       width: 100%;
-      aspect-ratio: 16/8;
+      aspect-ratio: 3/2;
       object-fit: cover;
-      object-position: center top;
+      object-position: center 15%;
       display: block;
-    }
-    .card-thumb--portrait {
-      object-fit: contain;
-      background: var(--bg);
     }
     .card-body {
       padding: 1.5rem 2rem 2rem;
@@ -223,7 +219,7 @@
   <div class="blogg-grid">
 
     <a href="blogg-preview.html" class="blogg-card">
-      <img src="robot_tilbud.png" alt="" class="card-thumb card-thumb--portrait" />
+      <img src="photo_oystein.jpg" alt="" class="card-thumb" />
       <div class="card-body">
         <div class="card-kicker">Claude Code i praksis <span class="serie-badge">Del 1</span></div>
         <div class="card-title">Femten minutter fra forespørsel til klart tilbud</div>
@@ -237,7 +233,7 @@
     </a>
 
     <a href="blogg-bugfix.html" class="blogg-card">
-      <img src="photo_tomas.jpg" alt="" class="card-thumb card-thumb--portrait" />
+      <img src="photo_tomas.jpg" alt="" class="card-thumb" />
       <div class="card-body">
         <div class="card-kicker">Claude Code i praksis <span class="serie-badge">Del 2</span></div>
         <div class="card-title">Bugfix fra A til Å med Claude Code og Jira</div>
@@ -251,7 +247,7 @@
     </a>
 
     <a href="blogg-datavask.html" class="blogg-card">
-      <img src="photo_loc.png" alt="" class="card-thumb card-thumb--portrait" />
+      <img src="photo_loc.png" alt="" class="card-thumb" />
       <div class="card-body">
         <div class="card-kicker">Claude Code i praksis <span class="serie-badge">Del 3</span></div>
         <div class="card-title">Datavask i praksis: fra rådata til strukturert informasjon</div>
@@ -265,7 +261,7 @@
     </a>
 
     <a href="blogg-hooks.html" class="blogg-card">
-      <img src="thumb_hooks.jpg" alt="" class="card-thumb" />
+      <img src="photo_oystein.jpg" alt="" class="card-thumb" />
       <div class="card-body">
         <div class="card-kicker">Sikkerhet</div>
         <div class="card-title">PII-skanning og audit-logging med Claude Hooks</div>
