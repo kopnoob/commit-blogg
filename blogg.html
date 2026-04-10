@@ -129,6 +129,10 @@
       object-position: center top;
       display: block;
     }
+    .card-thumb--portrait {
+      object-fit: contain;
+      background: var(--bg);
+    }
     .card-body {
       padding: 1.5rem 2rem 2rem;
     }
@@ -233,7 +237,7 @@
     </a>
 
     <a href="blogg-bugfix.html" class="blogg-card">
-      <img src="photo_tomas.jpg" alt="" class="card-thumb" />
+      <img src="photo_tomas.jpg" alt="" class="card-thumb card-thumb--portrait" />
       <div class="card-body">
         <div class="card-kicker">Claude Code i praksis <span class="serie-badge">Del 2</span></div>
         <div class="card-title">Bugfix fra A til Å med Claude Code og Jira</div>
@@ -247,7 +251,7 @@
     </a>
 
     <a href="blogg-datavask.html" class="blogg-card">
-      <img src="photo_loc.png" alt="" class="card-thumb" />
+      <img src="photo_loc.png" alt="" class="card-thumb card-thumb--portrait" />
       <div class="card-body">
         <div class="card-kicker">Claude Code i praksis <span class="serie-badge">Del 3</span></div>
         <div class="card-title">Datavask i praksis: fra rådata til strukturert informasjon</div>
