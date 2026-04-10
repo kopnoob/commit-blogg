@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Designforslag — Blogg</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #1a1a1a; font-family: sans-serif; }
+
+    /* ── LABEL ── */
+    .proposal-label {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 2rem 2.5rem 1.5rem;
+      font-family: 'Space Grotesk', sans-serif;
+      display: flex;
+      align-items: baseline;
+      gap: 1.25rem;
+    }
+    .proposal-label .num {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: #444;
+      line-height: 1;
+    }
+    .proposal-label .desc { color: #999; font-size: 0.85rem; }
+    .proposal-label strong { color: #eee; font-size: 1rem; display: block; margin-bottom: 0.2rem; }
+
+    /* ══════════════════════════════════════
+       DESIGN 1 — NYT / THE ATLANTIC
+       Featured hero + supporting grid
+    ══════════════════════════════════════ */
+    .d1 {
+      background: #fff;
+      font-family: 'Inter', sans-serif;
+      color: #111;
+    }
+    .d1-nav {
+      border-bottom: 3px solid #111;
+      padding: 1rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .d1-nav img { height: 26px; }
+    .d1-nav-links { display: flex; gap: 1.5rem; font-size: 0.8rem; font-weight: 500; color: #444; }
+    .d1-hero-strip {
+      border-bottom: 1px solid #ddd;
+      padding: 0.5rem 2.5rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #888;
+      display: flex;
+      gap: 2rem;
+    }
+    .d1-wrap { max-width: 1160px; margin: 0 auto; padding: 0 2.5rem 4rem; }
+
+    .d1-featured {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-bottom: 1px solid #ddd;
+      padding: 2.5rem 0;
+    }
+    .d1-featured-text { padding-right: 2.5rem; border-right: 1px solid #ddd; }
+    .d1-featured-img {
+      padding-left: 2.5rem;
+      display: flex;
+      align-items: flex-start;
+    }
+    .d1-featured-img img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 4px;
+    }
+    .d1-kicker {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #B5000E;
+      margin-bottom: 0.85rem;
+    }
+    .d1-serie {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #B5000E;
+      background: #FFF0F0;
+      border: 1px solid #F5C6C6;
+      border-radius: 3px;
+      padding: 1px 6px;
+      margin-left: 0.4rem;
+    }
+    .d1-feat-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1.15;
+      color: #111;
+      margin-bottom: 1rem;
+      letter-spacing: -0.5px;
+    }
+    .d1-feat-ingress {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #444;
+      margin-bottom: 1.5rem;
+    }
+    .d1-byline { display: flex; align-items: center; gap: 0.6rem; }
+    .d1-byline img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; object-position: top; }
+    .d1-byline span { font-size: 0.78rem; color: #666; }
+    .d1-byline strong { font-weight: 600; color: #333; }
+
+    .d1-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      padding-top: 2.5rem;
+    }
+    .d1-card {
+      padding: 0 2rem 0 0;
+      border-right: 1px solid #ddd;
+      text-decoration: none;
+      color: inherit;
+    }
+    .d1-card:last-child { border-right: none; padding-right: 0; padding-left: 2rem; }
+    .d1-card:nth-child(2) { padding: 0 2rem; }
+    .d1-card:hover .d1-card-title { text-decoration: underline; }
+    .d1-card-kicker { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #888; margin-bottom: 0.5rem; }
+    .d1-card-title { font-family: 'Playfair Display', Georgia, serif; font-size: 1.15rem; font-weight: 700; line-height: 1.3; color: #111; margin-bottom: 0.65rem; }
+    .d1-card-byline { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; }
+    .d1-card-byline img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; object-position: top; }
+    .d1-card-byline span { font-size: 0.72rem; color: #888; }
+
+    /* ══════════════════════════════════════
+       DESIGN 2 — SUBSTACK / LETTERPRESS
+       Full-width, no images, whitespace king
+    ══════════════════════════════════════ */
+    .d2 {
+      background: #FAFAF7;
+      font-family: 'Lora', Georgia, serif;
+      color: #1a1a1a;
+    }
+    .d2-nav {
+      background: #FAFAF7;
+      border-bottom: 1px solid #E0DDD6;
+      padding: 1.1rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .d2-nav img { height: 24px; }
+    .d2-header {
+      padding: 5rem 3rem 4rem;
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .d2-header h1 {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 2.25rem;
+      font-weight: 400;
+      font-style: italic;
+      color: #1a1a1a;
+      margin-bottom: 0.5rem;
+    }
+    .d2-header p { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: #888; }
+    .d2-wrap { max-width: 720px; margin: 0 auto; padding: 0 3rem 6rem; }
+    .d2-divider { border: none; border-top: 1px solid #E0DDD6; margin-bottom: 0; }
+    .d2-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid #E0DDD6;
+    }
+    .d2-card:hover .d2-title { color: #555; }
+    .d2-meta-top {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .d2-badge {
+      background: #2B5C96;
+      color: #fff;
+      border-radius: 3px;
+      padding: 1px 6px;
+      font-size: 0.58rem;
+    }
+    .d2-title {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      line-height: 1.25;
+      color: #1a1a1a;
+      margin-bottom: 0.85rem;
+      transition: color 0.15s;
+    }
+    .d2-ingress {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.75;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+    .d2-byline {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: 'Inter', sans-serif;
+    }
+    .d2-byline img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; object-position: top; }
+    .d2-byline-text { font-size: 0.78rem; color: #888; }
+    .d2-byline-name { font-weight: 600; color: #444; }
+
+    /* ══════════════════════════════════════
+       DESIGN 3 — MONOCLE / WALLPAPER*
+       Editorial grid, bold sans, accent color
+    ══════════════════════════════════════ */
+    .d3 {
+      background: #F2EFE9;
+      font-family: 'DM Sans', sans-serif;
+      color: #1c1c1c;
+    }
+    .d3-nav {
+      background: #1c1c1c;
+      padding: 1rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .d3-nav img { height: 24px; filter: brightness(0) invert(1); }
+    .d3-nav-links { display: flex; gap: 1.5rem; font-size: 0.78rem; color: #999; }
+    .d3-header {
+      padding: 3.5rem 3rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 2px solid #1c1c1c;
+    }
+    .d3-header h1 { font-size: 3.5rem; font-weight: 700; letter-spacing: -1px; line-height: 1; }
+    .d3-header p { font-size: 0.85rem; color: #888; text-align: right; max-width: 200px; }
+    .d3-wrap { padding: 0 3rem 5rem; }
+    .d3-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 1px;
+      background: #c8c3ba;
+      margin-top: 1px;
+    }
+    .d3-card {
+      background: #F2EFE9;
+      padding: 2rem 2rem 2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+      position: relative;
+    }
+    .d3-card:hover { background: #EAE6DE; }
+    .d3-card--featured { grid-row: span 2; padding: 2.5rem; }
+    .d3-num {
+      font-size: 5rem;
+      font-weight: 700;
+      line-height: 1;
+      color: #D4CFC6;
+      margin-bottom: 0.5rem;
+    }
+    .d3-kicker {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .d3-badge {
+      background: #1c1c1c;
+      color: #F2EFE9;
+      border-radius: 2px;
+      padding: 1px 6px;
+      font-size: 0.58rem;
+      font-weight: 700;
+    }
+    .d3-title-feat {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.3px;
+      color: #1c1c1c;
+      margin-bottom: 1.25rem;
+    }
+    .d3-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #1c1c1c;
+      margin-bottom: 0.75rem;
+    }
+    .d3-ingress {
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+    .d3-byline { display: flex; align-items: center; gap: 0.55rem; }
+    .d3-byline img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; object-position: top; border: 1.5px solid #c8c3ba; }
+    .d3-byline-text { font-size: 0.72rem; color: #888; }
+    .d3-byline-name { font-weight: 600; color: #444; }
+    .d3-feat-img {
+      width: 100%;
+      aspect-ratio: 3/2;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ══════════════════════════════════════
+       DESIGN 4 — SWISS GRID / INFORMATION
+       Ultra-structured, colored category rows
+    ══════════════════════════════════════ */
+    .d4 {
+      background: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      color: #111;
+    }
+    .d4-nav {
+      border-bottom: 1px solid #111;
+      padding: 1rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .d4-nav img { height: 24px; }
+    .d4-header {
+      padding: 2.5rem 2.5rem 2rem;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: flex-end;
+      gap: 2rem;
+    }
+    .d4-header h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
+    .d4-header-line { width: 1px; height: 40px; background: #ddd; }
+    .d4-header p { font-size: 0.85rem; color: #888; max-width: 260px; line-height: 1.5; }
+    .d4-wrap { padding: 0 2.5rem 5rem; }
+    .d4-row {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      border-bottom: 1px solid #e0e0e0;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.12s;
+    }
+    .d4-row:hover { background: #f8f8f8; }
+    .d4-cat {
+      padding: 2rem 1.5rem 2rem 0;
+      border-right: 1px solid #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .d4-cat-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 3px;
+      align-self: flex-start;
+    }
+    .d4-cat-label.serie { background: #2B5C96; }
+    .d4-cat-label.sikk  { background: #2A7A4B; }
+    .d4-del {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #bbb;
+      letter-spacing: 0.05em;
+    }
+    .d4-body {
+      padding: 2rem 0 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .d4-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #111;
+      letter-spacing: -0.2px;
+    }
+    .d4-ingress {
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: #666;
+      font-family: 'Inter', sans-serif;
+    }
+    .d4-byline { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem; }
+    .d4-byline img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; object-position: top; }
+    .d4-byline span { font-size: 0.72rem; color: #aaa; font-family: 'Inter', sans-serif; }
+    .d4-byline strong { font-weight: 600; color: #777; }
+
+    /* ══════════════════════════════════════
+       DESIGN 5 — DARK EDITORIAL
+       Verge / Pitchfork energy, dark + bold
+    ══════════════════════════════════════ */
+    .d5 {
+      background: #0f0f0f;
+      font-family: 'Space Grotesk', sans-serif;
+      color: #eee;
+    }
+    .d5-nav {
+      background: #0f0f0f;
+      border-bottom: 1px solid #1f1f1f;
+      padding: 1rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .d5-nav img { height: 24px; filter: brightness(0) invert(1); }
+    .d5-nav-links { display: flex; gap: 1.5rem; font-size: 0.78rem; color: #555; }
+    .d5-header {
+      padding: 4rem 2.5rem 3.5rem;
+      border-bottom: 1px solid #1f1f1f;
+    }
+    .d5-header h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1;
+      color: #fff;
+    }
+    .d5-header h1 span { color: #4a90d9; }
+    .d5-wrap { padding: 0 2.5rem 5rem; }
+    .d5-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: #1f1f1f;
+      margin-top: 1px;
+    }
+    .d5-card {
+      background: #0f0f0f;
+      padding: 2.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+      display: flex;
+      flex-direction: column;
+    }
+    .d5-card:hover { background: #141414; }
+    .d5-kicker {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #4a90d9;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .d5-badge {
+      background: #4a90d9;
+      color: #fff;
+      border-radius: 3px;
+      padding: 1px 6px;
+      font-size: 0.58rem;
+    }
+    .d5-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #fff;
+      letter-spacing: -0.3px;
+      margin-bottom: 0.85rem;
+    }
+    .d5-card:hover .d5-title { color: #4a90d9; }
+    .d5-ingress {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: #666;
+      font-family: 'Inter', sans-serif;
+      flex: 1;
+    }
+    .d5-byline {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #1f1f1f;
+    }
+    .d5-byline img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; object-position: top; filter: grayscale(30%); }
+    .d5-byline-text { font-size: 0.75rem; color: #555; font-family: 'Inter', sans-serif; }
+    .d5-byline-name { font-weight: 600; color: #aaa; display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ════ FORSLAG 1 ════ -->
+<div class="proposal-label">
+  <div class="num">1</div>
+  <div>
+    <strong>The Atlantic / New York Times</strong>
+    <span class="desc">Stor featured-artikkel øverst, tre støttende kort under. Serif-dominant, rødt aksent, tykt skillelinje-spor.</span>
+  </div>
+</div>
+<div class="d1">
+  <div class="d1-nav">
+    <img src="commit_logo.png" alt="Commit" />
+    <div class="d1-nav-links">
+      <span>Hvem er vi</span>
+      <span>Blogg</span>
+      <span>Kontakt oss</span>
+    </div>
+  </div>
+  <div class="d1-hero-strip">
+    <span>Claude Code i praksis</span>
+    <span>Utvikling</span>
+    <span>Sikkerhet</span>
+    <span>Data</span>
+  </div>
+  <div class="d1-wrap">
+    <div class="d1-featured">
+      <div class="d1-featured-text">
+        <div class="d1-kicker">Claude Code i praksis <span class="d1-serie">Del 1</span></div>
+        <div class="d1-feat-title">Femten minutter fra forespørsel til klart tilbud</div>
+        <p class="d1-feat-ingress">Vi fikk en forespørsel i Mercell en tirsdag. Vi ga Claude én instruksjon. Femten minutter senere var tilbudet klart for kvalitetssikring — uten at vi hadde åpnet et eneste dokument manuelt.</p>
+        <div class="d1-byline">
+          <img src="photo_oystein.jpg" alt="Øystein" />
+          <span><strong>Øystein Kopstad</strong> &nbsp;·&nbsp; 10. april 2026 &nbsp;·&nbsp; 8 min</span>
+        </div>
+      </div>
+      <div class="d1-featured-img">
+        <img src="photo_oystein.jpg" alt="" />
+      </div>
+    </div>
+    <div class="d1-grid">
+      <a href="#" class="d1-card">
+        <div class="d1-card-kicker">Claude Code i praksis &nbsp;·&nbsp; Del 2</div>
+        <div class="d1-card-title">Bugfix fra A til Å med Claude Code og Jira</div>
+        <div class="d1-card-byline">
+          <img src="photo_tomas.jpg" alt="" />
+          <span>Tomas Johansen &nbsp;·&nbsp; 8. april</span>
+        </div>
+      </a>
+      <a href="#" class="d1-card">
+        <div class="d1-card-kicker">Claude Code i praksis &nbsp;·&nbsp; Del 3</div>
+        <div class="d1-card-title">Datavask i praksis: fra rådata til strukturert informasjon</div>
+        <div class="d1-card-byline">
+          <img src="photo_loc.png" alt="" />
+          <span>Loc Cao Do &nbsp;·&nbsp; 5. april</span>
+        </div>
+      </a>
+      <a href="#" class="d1-card">
+        <div class="d1-card-kicker">Sikkerhet</div>
+        <div class="d1-card-title">PII-skanning og audit-logging med Claude Hooks</div>
+        <div class="d1-card-byline">
+          <img src="photo_oystein.jpg" alt="" />
+          <span>Øystein Kopstad &nbsp;·&nbsp; 1. april</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ════ FORSLAG 2 ════ -->
+<div class="proposal-label">
+  <div class="num">2</div>
+  <div>
+    <strong>Substack / Letterpress</strong>
+    <span class="desc">Full-bredde, ingen bilder, serif-titler, maks luft. Teksten er alt.</span>
+  </div>
+</div>
+<div class="d2">
+  <div class="d2-nav">
+    <img src="commit_logo.png" alt="Commit" />
+  </div>
+  <div class="d2-header">
+    <h1>Blogg</h1>
+    <p>Tanker og erfaringer fra hverdagen hos Commit</p>
+  </div>
+  <div class="d2-wrap">
+    <a href="#" class="d2-card">
+      <div class="d2-meta-top">Claude Code i praksis <span class="d2-badge">Del 1</span></div>
+      <div class="d2-title">Femten minutter fra forespørsel til klart tilbud</div>
+      <p class="d2-ingress">Vi fikk en forespørsel i Mercell en tirsdag. Vi ga Claude én instruksjon. Femten minutter senere var tilbudet klart for kvalitetssikring.</p>
+      <div class="d2-byline">
+        <img src="photo_oystein.jpg" alt="" />
+        <div class="d2-byline-text">
+          <span class="d2-byline-name">Øystein Kopstad</span>
+          10. april 2026 · 8 min lesetid
+        </div>
+      </div>
+    </a>
+    <a href="#" class="d2-card">
+      <div class="d2-meta-top">Claude Code i praksis <span class="d2-badge">Del 2</span></div>
+      <div class="d2-title">Bugfix fra A til Å med Claude Code og Jira</div>
+      <p class="d2-ingress">En bug kom inn som Jira-issue en mandag morgen. Innen lunsj var den fikset, testet og issue-en lukket, uten at utvikleren måtte klikke seg rundt i tre ulike verktøy.</p>
+      <div class="d2-byline">
+        <img src="photo_tomas.jpg" alt="" />
+        <div class="d2-byline-text">
+          <span class="d2-byline-name">Tomas Johansen</span>
+          8. april 2026 · 6 min lesetid
+        </div>
+      </div>
+    </a>
+    <a href="#" class="d2-card">
+      <div class="d2-meta-top">Claude Code i praksis <span class="d2-badge">Del 3</span></div>
+      <div class="d2-title">Datavask i praksis: fra rådata til strukturert informasjon</div>
+      <p class="d2-ingress">Vi fikk levert en Excel-fil med 4 000 rader og tre forskjellige datoformater. Å rydde opp tok en halvtime, mesteparten av det en kaffekopp.</p>
+      <div class="d2-byline">
+        <img src="photo_loc.png" alt="" />
+        <div class="d2-byline-text">
+          <span class="d2-byline-name">Loc Cao Do</span>
+          5. april 2026 · 5 min lesetid
+        </div>
+      </div>
+    </a>
+    <a href="#" class="d2-card">
+      <div class="d2-meta-top">Sikkerhet</div>
+      <div class="d2-title">PII-skanning og audit-logging med Claude Hooks</div>
+      <p class="d2-ingress">Hooks er den minst omtalte delen av Claude Code. De er også den delen som gjør det mulig å bruke Claude trygt i produksjonsnære miljøer.</p>
+      <div class="d2-byline">
+        <img src="photo_oystein.jpg" alt="" />
+        <div class="d2-byline-text">
+          <span class="d2-byline-name">Øystein Kopstad</span>
+          1. april 2026 · 7 min lesetid
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ════ FORSLAG 3 ════ -->
+<div class="proposal-label">
+  <div class="num">3</div>
+  <div>
+    <strong>Monocle / Wallpaper*</strong>
+    <span class="desc">Asymmetrisk rutenett, stor featured-artikkel med bilde, nummererte kort, varm beige palett.</span>
+  </div>
+</div>
+<div class="d3">
+  <div class="d3-nav">
+    <img src="commit_logo.png" alt="Commit" />
+    <div class="d3-nav-links">
+      <span>Hvem er vi</span><span>Blogg</span><span>Kontakt oss</span>
+    </div>
+  </div>
+  <div class="d3-header" style="max-width:none;padding:2.5rem 3rem 2rem;">
+    <h1>Blogg</h1>
+    <p>Tanker og erfaringer fra hverdagen hos Commit</p>
+  </div>
+  <div class="d3-wrap">
+    <div class="d3-grid">
+      <a href="#" class="d3-card d3-card--featured">
+        <div class="d3-num">01</div>
+        <div class="d3-kicker">Claude Code i praksis <span class="d3-badge">Del 1</span></div>
+        <div class="d3-title-feat">Femten minutter fra forespørsel til klart tilbud</div>
+        <p class="d3-ingress">Vi fikk en forespørsel i Mercell en tirsdag. Vi ga Claude én instruksjon. Femten minutter senere var tilbudet klart for kvalitetssikring.</p>
+        <img src="photo_oystein.jpg" alt="" class="d3-feat-img" />
+        <div class="d3-byline">
+          <img src="photo_oystein.jpg" alt="" />
+          <div class="d3-byline-text"><span class="d3-byline-name">Øystein Kopstad</span>10. april · 8 min</div>
+        </div>
+      </a>
+      <a href="#" class="d3-card">
+        <div class="d3-num" style="font-size:3rem">02</div>
+        <div class="d3-kicker">Claude Code i praksis <span class="d3-badge">Del 2</span></div>
+        <div class="d3-title">Bugfix fra A til Å med Claude Code og Jira</div>
+        <div class="d3-byline">
+          <img src="photo_tomas.jpg" alt="" />
+          <div class="d3-byline-text"><span class="d3-byline-name">Tomas Johansen</span>8. april · 6 min</div>
+        </div>
+      </a>
+      <a href="#" class="d3-card">
+        <div class="d3-num" style="font-size:3rem">03</div>
+        <div class="d3-kicker">Claude Code i praksis <span class="d3-badge">Del 3</span></div>
+        <div class="d3-title">Datavask i praksis: fra rådata til strukturert informasjon</div>
+        <div class="d3-byline">
+          <img src="photo_loc.png" alt="" />
+          <div class="d3-byline-text"><span class="d3-byline-name">Loc Cao Do</span>5. april · 5 min</div>
+        </div>
+      </a>
+      <a href="#" class="d3-card">
+        <div class="d3-num" style="font-size:3rem">04</div>
+        <div class="d3-kicker">Sikkerhet</div>
+        <div class="d3-title">PII-skanning og audit-logging med Claude Hooks</div>
+        <div class="d3-byline">
+          <img src="photo_oystein.jpg" alt="" />
+          <div class="d3-byline-text"><span class="d3-byline-name">Øystein Kopstad</span>1. april · 7 min</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ════ FORSLAG 4 ════ -->
+<div class="proposal-label">
+  <div class="num">4</div>
+  <div>
+    <strong>Swiss Grid / Informasjonsdesign</strong>
+    <span class="desc">Radbasert tabell-layout, tydelig kategorifarge, ingen bilder. Ryddig og skalerbart.</span>
+  </div>
+</div>
+<div class="d4">
+  <div class="d4-nav">
+    <img src="commit_logo.png" alt="Commit" />
+  </div>
+  <div class="d4-header">
+    <h1>Blogg</h1>
+    <div class="d4-header-line"></div>
+    <p>Tanker og erfaringer fra hverdagen hos Commit</p>
+  </div>
+  <div class="d4-wrap" style="margin-top:0;">
+    <a href="#" class="d4-row">
+      <div class="d4-cat">
+        <span class="d4-cat-label serie">Serie</span>
+        <span class="d4-del">Del 1 av 3</span>
+      </div>
+      <div class="d4-body">
+        <div class="d4-title">Femten minutter fra forespørsel til klart tilbud</div>
+        <p class="d4-ingress">Vi fikk en forespørsel i Mercell en tirsdag. Vi ga Claude én instruksjon. Femten minutter senere var tilbudet klart.</p>
+        <div class="d4-byline">
+          <img src="photo_oystein.jpg" alt="" />
+          <span><strong>Øystein Kopstad</strong> · 10. april 2026 · 8 min</span>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="d4-row">
+      <div class="d4-cat">
+        <span class="d4-cat-label serie">Serie</span>
+        <span class="d4-del">Del 2 av 3</span>
+      </div>
+      <div class="d4-body">
+        <div class="d4-title">Bugfix fra A til Å med Claude Code og Jira</div>
+        <p class="d4-ingress">En bug kom inn som Jira-issue en mandag morgen. Innen lunsj var den fikset, testet og issue-en lukket.</p>
+        <div class="d4-byline">
+          <img src="photo_tomas.jpg" alt="" />
+          <span><strong>Tomas Johansen</strong> · 8. april 2026 · 6 min</span>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="d4-row">
+      <div class="d4-cat">
+        <span class="d4-cat-label serie">Serie</span>
+        <span class="d4-del">Del 3 av 3</span>
+      </div>
+      <div class="d4-body">
+        <div class="d4-title">Datavask i praksis: fra rådata til strukturert informasjon</div>
+        <p class="d4-ingress">Vi fikk levert en Excel-fil med 4 000 rader og tre forskjellige datoformater. Å rydde opp tok en halvtime.</p>
+        <div class="d4-byline">
+          <img src="photo_loc.png" alt="" />
+          <span><strong>Loc Cao Do</strong> · 5. april 2026 · 5 min</span>
+        </div>
+      </div>
+    </a>
+    <a href="#" class="d4-row">
+      <div class="d4-cat">
+        <span class="d4-cat-label sikk">Sikkerhet</span>
+      </div>
+      <div class="d4-body">
+        <div class="d4-title">PII-skanning og audit-logging med Claude Hooks</div>
+        <p class="d4-ingress">Hooks er den minst omtalte delen av Claude Code — og den som gjør det mulig å bruke Claude trygt i produksjonsnære miljøer.</p>
+        <div class="d4-byline">
+          <img src="photo_oystein.jpg" alt="" />
+          <span><strong>Øystein Kopstad</strong> · 1. april 2026 · 7 min</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ════ FORSLAG 5 ════ -->
+<div class="proposal-label">
+  <div class="num">5</div>
+  <div>
+    <strong>Dark Editorial / The Verge</strong>
+    <span class="desc">Mørk bakgrunn, hvit og blå kontrast, bold sans-serif, tech-forward.</span>
+  </div>
+</div>
+<div class="d5">
+  <div class="d5-nav">
+    <img src="commit_logo.png" alt="Commit" />
+    <div class="d5-nav-links">
+      <span>Hvem er vi</span><span>Blogg</span><span>Kontakt oss</span>
+    </div>
+  </div>
+  <div class="d5-header">
+    <h1>Blogg<span>.</span></h1>
+  </div>
+  <div class="d5-wrap">
+    <div class="d5-grid">
+      <a href="#" class="d5-card">
+        <div class="d5-kicker">Claude Code i praksis <span class="d5-badge">Del 1</span></div>
+        <div class="d5-title">Femten minutter fra forespørsel til klart tilbud</div>
+        <p class="d5-ingress">Vi fikk en forespørsel i Mercell en tirsdag. Vi ga Claude én instruksjon. Femten minutter senere var tilbudet klart for kvalitetssikring.</p>
+        <div class="d5-byline">
+          <img src="photo_oystein.jpg" alt="" />
+          <div class="d5-byline-text"><span class="d5-byline-name">Øystein Kopstad</span>10. april · 8 min</div>
+        </div>
+      </a>
+      <a href="#" class="d5-card">
+        <div class="d5-kicker">Claude Code i praksis <span class="d5-badge">Del 2</span></div>
+        <div class="d5-title">Bugfix fra A til Å med Claude Code og Jira</div>
+        <p class="d5-ingress">En bug kom inn som Jira-issue en mandag morgen. Innen lunsj var den fikset, testet og issue-en lukket, uten at utvikleren måtte klikke seg rundt i tre ulike verktøy.</p>
+        <div class="d5-byline">
+          <img src="photo_tomas.jpg" alt="" />
+          <div class="d5-byline-text"><span class="d5-byline-name">Tomas Johansen</span>8. april · 6 min</div>
+        </div>
+      </a>
+      <a href="#" class="d5-card">
+        <div class="d5-kicker">Claude Code i praksis <span class="d5-badge">Del 3</span></div>
+        <div class="d5-title">Datavask i praksis: fra rådata til strukturert informasjon</div>
+        <p class="d5-ingress">Vi fikk levert en Excel-fil med 4 000 rader og tre forskjellige datoformater. Å rydde opp tok en halvtime, mesteparten av det en kaffekopp.</p>
+        <div class="d5-byline">
+          <img src="photo_loc.png" alt="" />
+          <div class="d5-byline-text"><span class="d5-byline-name">Loc Cao Do</span>5. april · 5 min</div>
+        </div>
+      </a>
+      <a href="#" class="d5-card">
+        <div class="d5-kicker">Sikkerhet</div>
+        <div class="d5-title">PII-skanning og audit-logging med Claude Hooks</div>
+        <p class="d5-ingress">Hooks er den minst omtalte delen av Claude Code. De er også den delen som gjør det mulig å bruke Claude trygt i produksjonsnære miljøer.</p>
+        <div class="d5-byline">
+          <img src="photo_oystein.jpg" alt="" />
+          <div class="d5-byline-text"><span class="d5-byline-name">Øystein Kopstad</span>1. april · 7 min</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
