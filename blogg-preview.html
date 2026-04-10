@@ -317,6 +317,38 @@
     }
     .cta-box a:hover { text-decoration: underline; }
 
+    /* ── SERIE ── */
+    .series-list { list-style: none; }
+    .series-item {
+      padding: 0.5rem 0.75rem 0.5rem 0.9rem;
+      border-left: 2px solid var(--line);
+      margin-bottom: 0.35rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .series-item.current {
+      border-left-color: var(--blue);
+      background: var(--blue-light);
+    }
+    .series-item a {
+      font-size: 0.81rem;
+      line-height: 1.4;
+      color: var(--ink-soft);
+      text-decoration: none;
+      display: block;
+    }
+    .series-item a:hover { color: var(--blue); }
+    .series-item.current a { color: var(--blue); font-weight: 600; }
+    .series-del {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--blue);
+      display: block;
+      margin-bottom: 0.15rem;
+      opacity: 0.75;
+    }
+
     /* ── SIDEBAR ── */
     .sidebar { position: sticky; top: 80px; }
 
@@ -471,7 +503,7 @@
   <!-- ARTICLE MAIN -->
   <article class="article-main">
 
-    <p class="article-kicker">Claude Code i praksis</p>
+    <p class="article-kicker">Claude Code i praksis &nbsp;·&nbsp; Del 1</p>
 
     <h1 class="article-title">Femten minutter fra forespørsel til klart tilbud</h1>
 
@@ -607,6 +639,30 @@
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Serie — Claude Code i praksis</div>
+      <ol class="series-list">
+        <li class="series-item current">
+          <a href="blogg-preview.html">
+            <span class="series-del">Del 1</span>
+            Femten minutter fra forespørsel til klart tilbud
+          </a>
+        </li>
+        <li class="series-item">
+          <a href="blogg-bugfix.html">
+            <span class="series-del">Del 2</span>
+            Bugfix fra A til Å med Claude Code og Jira
+          </a>
+        </li>
+        <li class="series-item">
+          <a href="blogg-datavask.html">
+            <span class="series-del">Del 3</span>
+            Datavask i praksis: fra rådata til strukturert informasjon
+          </a>
+        </li>
+      </ol>
+    </div>
 
     <div class="sidebar-section">
       <div class="sidebar-label">Innhold</div>
