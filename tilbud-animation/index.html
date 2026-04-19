@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #0a0f1a;
+        font-family: "Manrope", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        color: #ffffff;
+      }
+
+      /* ============ TOP BAR ============ */
+      .top-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1920px;
+        height: 138px;
+        background: #0a0f1a;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        display: flex;
+        align-items: center;
+        padding: 0 48px;
+        z-index: 10;
+      }
+      .top-logo-slot {
+        width: 180px;
+        height: 62px;
+        flex-shrink: 0;
+      }
+      .top-title-wrap {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 32px;
+      }
+      .top-title {
+        font-family: "Manrope", sans-serif;
+        font-weight: 700;
+        font-size: 34px;
+        color: #ffffff;
+        letter-spacing: -0.02em;
+        text-align: center;
+        line-height: 1.1;
+        max-width: 1100px;
+      }
+      .top-title .step-tag {
+        color: #2b7ab3;
+        font-weight: 800;
+        margin-right: 14px;
+      }
+      .dots {
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+        align-items: center;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.18);
+        transition: none;
+      }
+      .dot.active {
+        background: #2b7ab3;
+        box-shadow: 0 0 12px rgba(43,122,179,0.6);
+      }
+
+      /* ============ BOTTOM BAR ============ */
+      .bottom-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 1920px;
+        height: 138px;
+        background: #0a0f1a;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        z-index: 10;
+      }
+
+      .callout {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1920px;
+        height: 138px;
+        display: flex;
+        align-items: center;
+        padding: 0 48px 0 40px;
+        gap: 28px;
+        background: #0a0f1a;
+        border-left: 8px solid #1d4e7a;
+      }
+      .callout .icon {
+        font-size: 46px;
+        line-height: 1;
+        width: 64px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      .callout .meta {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1;
+        min-width: 0;
+      }
+      .callout .tag {
+        font-family: "Manrope", sans-serif;
+        font-weight: 800;
+        font-size: 16px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #8a9bb0;
+      }
+      .callout .body {
+        font-family: "Manrope", sans-serif;
+        font-weight: 500;
+        font-size: 30px;
+        color: #ffffff;
+        letter-spacing: -0.01em;
+        line-height: 1.15;
+        max-width: 1700px;
+      }
+      .callout .body strong {
+        font-weight: 800;
+        color: #ffffff;
+      }
+      .callout.tools { border-left-color: #1d4e7a; }
+      .callout.tools .tag { color: #5aa0d4; }
+      .callout.mcp { border-left-color: #2cb5bc; }
+      .callout.mcp .tag { color: #2cb5bc; }
+      .callout.skills { border-left-color: #1d4e7a; }
+      .callout.skills .tag { color: #5aa0d4; }
+      .callout.hooks { border-left-color: #5da858; }
+      .callout.hooks .tag { color: #7ec878; }
+      .callout.ask { border-left-color: #d4a853; }
+      .callout.ask .tag { color: #e8c37a; }
+      .callout.prompt { border-left-color: #d4a853; }
+      .callout.prompt .tag { color: #e8c37a; }
+      .callout.agents { border-left-color: #2cb5bc; }
+      .callout.agents .tag { color: #2cb5bc; }
+      .callout.result { border-left-color: #5da858; }
+      .callout.result .tag { color: #7ec878; }
+      .callout.write { border-left-color: #1d4e7a; }
+      .callout.write .tag { color: #5aa0d4; }
+
+      /* ============ FULL SCREEN CARDS ============ */
+      .cover {
+        position: absolute;
+        inset: 0;
+        background: #0a0f1a;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0 120px;
+        overflow: hidden;
+      }
+      .cover::before {
+        content: "";
+        position: absolute;
+        width: 1400px;
+        height: 1400px;
+        background: radial-gradient(circle, rgba(43,122,179,0.22) 0%, rgba(10,15,26,0) 65%);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      .cover .cover-inner {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 32px;
+        max-width: 1600px;
+      }
+      .cover .cover-logo {
+        height: 96px;
+        width: auto;
+        filter: brightness(0) invert(1);
+        margin-bottom: 18px;
+      }
+      .cover .eyebrow {
+        font-family: "Manrope", sans-serif;
+        font-weight: 800;
+        font-size: 22px;
+        letter-spacing: 0.38em;
+        text-transform: uppercase;
+        color: #2b7ab3;
+      }
+      .cover .title {
+        font-family: "Manrope", sans-serif;
+        font-weight: 800;
+        font-size: 110px;
+        line-height: 1.02;
+        letter-spacing: -0.035em;
+        color: #ffffff;
+        max-width: 1500px;
+      }
+      .cover .title .accent {
+        color: #2b7ab3;
+      }
+      .cover .subtitle {
+        font-family: "Manrope", sans-serif;
+        font-weight: 400;
+        font-size: 34px;
+        color: #8a9bb0;
+        letter-spacing: -0.005em;
+        max-width: 1200px;
+        line-height: 1.35;
+      }
+      .cover .rule {
+        width: 120px;
+        height: 3px;
+        background: #2b7ab3;
+        margin: 12px 0;
+      }
+      .cover .outro-stat {
+        font-family: "Manrope", sans-serif;
+        font-weight: 800;
+        font-size: 220px;
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+        color: #ffffff;
+        font-variant-numeric: tabular-nums;
+      }
+      .cover .outro-stat .unit {
+        color: #2b7ab3;
+        font-size: 90px;
+        letter-spacing: -0.02em;
+        margin-left: 14px;
+      }
+      .cover .outro-label {
+        font-family: "Manrope", sans-serif;
+        font-weight: 500;
+        font-size: 38px;
+        color: #ffffff;
+        letter-spacing: -0.005em;
+        max-width: 1300px;
+      }
+
+      /* Background decorative glow (behind video, visible in bars area through subtle tint) */
+      .ambient-glow {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 900px;
+        height: 900px;
+        background: radial-gradient(circle, rgba(43,122,179,0.08) 0%, rgba(10,15,26,0) 70%);
+        pointer-events: none;
+        z-index: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-duration="470.62"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- VIDEO (Track 0) — wrapped in non-timed container to avoid nesting under timed root -->
+      <div style="position: absolute; inset: 0; z-index: 0;">
+        <video
+          id="a-roll"
+          class="clip"
+          src="Tilbud_demo.mp4"
+          muted
+          playsinline
+          data-start="0"
+          data-duration="470.62"
+          data-track-index="0"
+          style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #0a0f1a;"
+        ></video>
+      </div>
+
+      <!-- =============================================================
+           SCENE 0 — INTRO COVER (0.0 - 16.0) Track 3
+           ============================================================= -->
+      <div
+        id="cover-intro"
+        class="clip cover"
+        data-start="0"
+        data-duration="16"
+        data-track-index="3"
+      >
+        <div class="cover-inner">
+          <img src="commit_logo.png" alt="Commit" class="cover-logo" id="intro-logo" />
+          <div class="eyebrow" id="intro-eyebrow">CLAUDE-PLATTFORMEN I PRAKSIS</div>
+          <div class="title" id="intro-title">
+            Fra Mercell-invitasjon<br/>til <span class="accent">klart tilbud</span>
+          </div>
+          <div class="rule" id="intro-rule"></div>
+          <div class="subtitle" id="intro-subtitle">
+            Ti trinn fra e-post i innboksen til ferdig utfylt tilbud lastet opp i Mercell &mdash; uten menneskelig tastetrykk underveis.
+          </div>
+        </div>
+      </div>
+
+      <!-- Persistent top-bar logo (single img, spans all top-bar scenes) -->
+      <img
+        id="persistent-logo"
+        src="commit_logo.png"
+        alt="Commit"
+        class="clip"
+        data-start="16"
+        data-duration="444"
+        data-track-index="5"
+        style="position: absolute; top: 38px; left: 48px; height: 62px; width: auto; filter: brightness(0) invert(1); z-index: 12;"
+      />
+
+      <!-- =============================================================
+           TOP BARS — one per overlay scene (Track 1)
+           ============================================================= -->
+      <div id="top-1" class="clip top-bar" data-start="16" data-duration="16" data-track-index="1">
+        <div class="top-logo-slot"></div>
+        <div class="top-title-wrap"><div class="top-title"><span class="step-tag">TRINN 1</span>Foresp&oslash;rsel mottatt</div></div>
+        <div class="dots" data-active="1">
+          <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+
+      <div id="top-2" class="clip top-bar" data-start="32" data-duration="16" data-track-index="1">
+        <div class="top-logo-slot"></div>
+        <div class="top-title-wrap"><div class="top-title"><span class="step-tag">TRINN 2</span>Skill aktiveres</div></div>
+        <div class="dots">
+          <div class="dot active"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+
+      <div id="top-3" class="clip top-bar" data-start="48" data-duration="52" data-track-index="1">
+        <div class="top-logo-slot"></div>
+        <div class="top-title-wrap"><div class="top-title"><span class="step-tag">TRINN 3</span>Henter konkurransegrunnlag</div></div>
+        <div class="dots">
+          <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+
+      <div id="top-4" class="clip top-bar" data-start="100" data-duration="32" data-track-index="1">
+        <div class="top-logo-slot"></div>
+        <div class="top-title-wrap"><div class="top-title"><span class="step-tag">TRINN 4</span>Semantisk s&oslash;k i Cinode</div></div>
+        <div class="dots">
+          <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div>
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+
+      <div id="top-5" class="clip top-bar" data-start="132" data-duration="108" data-track-index="1">
+        <div class="top-logo-slot"></div>
+        <div class="top-title-wrap"><div class="top-title"><span class="step-tag">TRINN 5</span>Tre parallelle analyse-agenter</div></div>
+        <div class="dots">
+          <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div>
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+
+      <div id="top-6" class="clip top-bar" data-start="240" data-duration="20" data-track-index="1">
+        <div class="top-logo-slot"></div>
+        <div class="top-title-wrap"><div class="top-title"><span class="step-tag">TRINN 6</span>Analysen er ferdig</div></div>
+        <div class="dots">
+          <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div>
+          <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+
+      <div id="top-7" class="clip top-bar" data-start="260" data-duration="30" data-track-index="1">
+        <div class="top-logo-slot"></div>
+        <div class="top-title-wrap"><div class="top-title"><span class="step-tag">TRINN 7</span>Claude sp&oslash;r deg</div></div>
+        <div class="dots">
+          <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div>
+          <div class="dot active"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+
+      <div id="top-8" class="clip top-bar" data-start="290" data-duration="70" data-track-index="1">
+        <div class="top-logo-slot"></div>
+        <div class="top-title-wrap"><div class="top-title"><span class="step-tag">TRINN 8</span>Samler all kontekst</div></div>
+        <div class="dots">
+          <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div>
+          <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+
+      <div id="top-9" class="clip top-bar" data-start="360" data-duration="60" data-track-index="1">
+        <div class="top-logo-slot"></div>
+        <div class="top-title-wrap"><div class="top-title"><span class="step-tag">TRINN 9</span>Fire dokument-agenter i parallell</div></div>
+        <div class="dots">
+          <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div>
+          <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div>
+        </div>
+      </div>
+
+      <div id="top-10" class="clip top-bar" data-start="420" data-duration="40" data-track-index="1">
+        <div class="top-logo-slot"></div>
+        <div class="top-title-wrap"><div class="top-title"><span class="step-tag">TRINN 10</span>Opplasting til Mercell</div></div>
+        <div class="dots">
+          <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div>
+          <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div>
+        </div>
+      </div>
+
+      <!-- =============================================================
+           BOTTOM CALLOUTS (Track 2)
+           ============================================================= -->
+      <div id="call-1" class="clip callout prompt" data-start="16" data-duration="16" data-track-index="2">
+        <div class="icon">&#128104;&#8205;&#128187;</div>
+        <div class="meta">
+          <div class="tag">PROMPT</div>
+          <div class="body">&Oslash;ystein ber Claude: <strong>sjekk utlysningen mot Cinode og bygg tilbud klart i Mercell</strong></div>
+        </div>
+      </div>
+
+      <div id="call-2" class="clip callout skills" data-start="32" data-duration="16" data-track-index="2">
+        <div class="icon">&#127919;</div>
+        <div class="meta">
+          <div class="tag">SKILLS</div>
+          <div class="body"><strong>mercell-tilbud</strong> &mdash; skill laster inn firmamaler, prosedyre og tilganger automatisk</div>
+        </div>
+      </div>
+
+      <div id="call-3" class="clip callout tools" data-start="48" data-duration="52" data-track-index="2">
+        <div class="icon">&#128736;</div>
+        <div class="meta">
+          <div class="tag">TOOLS</div>
+          <div class="body"><strong>Playwright</strong> logger inn i Mercell via CLI &middot; <strong>Python3</strong> konverterer 10 DOCX-er parallelt</div>
+        </div>
+      </div>
+
+      <div id="call-4" class="clip callout mcp" data-start="100" data-duration="32" data-track-index="2">
+        <div class="icon">&#128161;</div>
+        <div class="meta">
+          <div class="tag">MCP</div>
+          <div class="body">Cinode <strong>search-employees-by-skill</strong> &mdash; fem s&oslash;k: Java, Spring Boot, Backend, Kotlin, Microservices, Kubernetes</div>
+        </div>
+      </div>
+
+      <div id="call-5" class="clip callout agents" data-start="132" data-duration="108" data-track-index="2">
+        <div class="icon">&#129302;</div>
+        <div class="meta">
+          <div class="tag">AGENTS</div>
+          <div class="body"><strong>&Oslash;yvind Julsrud &middot; Nils Ove Tendenes &middot; Sigbj&oslash;rn Myhre</strong> &mdash; hver dypanalysert mot Java-kravene</div>
+        </div>
+      </div>
+
+      <div id="call-6" class="clip callout result" data-start="240" data-duration="20" data-track-index="2">
+        <div class="icon">&#10004;</div>
+        <div class="meta">
+          <div class="tag">RESULT</div>
+          <div class="body">Alle tre kandidater rangert etter <strong>A- og B-krav</strong> med konkrete kildehenvisninger</div>
+        </div>
+      </div>
+
+      <div id="call-7" class="clip callout ask" data-start="260" data-duration="30" data-track-index="2">
+        <div class="icon">&#10067;</div>
+        <div class="meta">
+          <div class="tag">ASK USER QUESTION</div>
+          <div class="body"><strong>AskUserQuestion</strong> &mdash; kandidat, timepris, reise, signatur</div>
+        </div>
+      </div>
+
+      <div id="call-8" class="clip callout write" data-start="290" data-duration="70" data-track-index="2">
+        <div class="icon">&#128221;</div>
+        <div class="meta">
+          <div class="tag">WRITE</div>
+          <div class="body"><strong>CONFIG.md</strong> generert &mdash; 237 linjer med alt dokument-agentene trenger</div>
+        </div>
+      </div>
+
+      <div id="call-9" class="clip callout agents" data-start="360" data-duration="60" data-track-index="2">
+        <div class="icon">&#129302;</div>
+        <div class="meta">
+          <div class="tag">AGENTS</div>
+          <div class="body"><strong>Tilbudsbrev &middot; Egenerkl&aelig;ring &middot; Vedlegg 1 &middot; Bilag 1&ndash;8</strong> &mdash; genereres samtidig</div>
+        </div>
+      </div>
+
+      <div id="call-10" class="clip callout tools" data-start="420" data-duration="40" data-track-index="2">
+        <div class="icon">&#128736;</div>
+        <div class="meta">
+          <div class="tag">TOOLS</div>
+          <div class="body"><strong>Playwright</strong> laster opp alle fire dokumenter til innsending-fanen i Mercell</div>
+        </div>
+      </div>
+
+      <!-- =============================================================
+           SCENE 11 — OUTRO COVER (460.0 - 470.62) Track 3
+           ============================================================= -->
+      <div
+        id="cover-outro"
+        class="clip cover"
+        data-start="460"
+        data-duration="10.62"
+        data-track-index="3"
+      >
+        <div class="cover-inner">
+          <div class="eyebrow" id="outro-eyebrow">FRA E-POST TIL KLART TILBUD</div>
+          <div class="outro-stat" id="outro-stat">7:50<span class="unit">MIN</span></div>
+          <div class="rule" id="outro-rule"></div>
+          <div class="outro-label" id="outro-label">
+            Ti trinn &middot; tre agenter i parallell &middot; ett klikk for innsending
+          </div>
+          <img src="commit_logo.png" alt="Commit" class="cover-logo" id="outro-logo" style="margin-top: 40px; margin-bottom: 0;" />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      /* ============================================================
+         SCENE 0 — INTRO COVER (0.0 - 16.0)
+         ============================================================ */
+      tl.from("#intro-logo", { y: -40, opacity: 0, duration: 0.9, ease: "power3.out" }, 0.2);
+      tl.from("#intro-eyebrow", { opacity: 0, letterSpacing: "0.15em", duration: 0.8, ease: "power2.out" }, 0.6);
+      tl.from("#intro-title", { y: 60, opacity: 0, duration: 1.1, ease: "expo.out" }, 0.9);
+      tl.from("#intro-rule", { scaleX: 0, opacity: 0, transformOrigin: "left center", duration: 0.7, ease: "power3.out" }, 1.6);
+      tl.from("#intro-subtitle", { y: 30, opacity: 0, duration: 0.9, ease: "power2.out" }, 1.9);
+
+      /* ============================================================
+         Helper for entrance of a scene's top-bar + callout.
+         Each scene uses varied eases / directions / durations.
+         ============================================================ */
+
+      /* SCENE 1 — 16.0 (power3.out, slight bounce on dot) */
+      tl.from("#top-1 .top-logo", { opacity: 0, x: -24, duration: 0.55, ease: "power2.out" }, 16.1);
+      tl.from("#top-1 .top-title", { y: -20, opacity: 0, duration: 0.6, ease: "power3.out" }, 16.25);
+      tl.from("#top-1 .dot", { opacity: 0, scale: 0.4, duration: 0.45, ease: "back.out(1.6)", stagger: 0.035 }, 16.2);
+      tl.from("#call-1", { x: -60, opacity: 0, duration: 0.7, ease: "power3.out" }, 16.35);
+      tl.from("#call-1 .icon", { scale: 0.5, opacity: 0, duration: 0.5, ease: "back.out(2)" }, 16.55);
+      tl.from("#call-1 .tag", { opacity: 0, y: 12, duration: 0.45, ease: "power2.out" }, 16.65);
+      tl.from("#call-1 .body", { opacity: 0, y: 16, duration: 0.55, ease: "power2.out" }, 16.75);
+
+      /* SCENE 2 — 32.0 (expo.out, opacity-led) */
+      tl.from("#top-2 .top-logo", { opacity: 0, duration: 0.5, ease: "power2.out" }, 32.1);
+      tl.from("#top-2 .top-title", { opacity: 0, letterSpacing: "0.08em", duration: 0.7, ease: "expo.out" }, 32.2);
+      tl.from("#top-2 .dot", { opacity: 0, duration: 0.4, ease: "power1.out", stagger: 0.03 }, 32.15);
+      tl.from("#call-2", { x: -50, opacity: 0, duration: 0.65, ease: "expo.out" }, 32.3);
+      tl.from("#call-2 .icon", { rotation: -20, opacity: 0, duration: 0.55, ease: "back.out(1.8)" }, 32.5);
+      tl.from("#call-2 .tag", { opacity: 0, duration: 0.4, ease: "sine.out" }, 32.6);
+      tl.from("#call-2 .body", { opacity: 0, y: 10, duration: 0.5, ease: "power2.out" }, 32.7);
+
+      /* SCENE 3 — 48.0 (power2.out + scale) */
+      tl.from("#top-3 .top-logo", { opacity: 0, scale: 0.85, duration: 0.5, ease: "back.out(1.4)" }, 48.1);
+      tl.from("#top-3 .top-title", { y: 16, opacity: 0, duration: 0.6, ease: "power2.out" }, 48.2);
+      tl.from("#top-3 .dot", { opacity: 0, y: -10, duration: 0.4, ease: "power2.out", stagger: 0.025 }, 48.18);
+      tl.from("#call-3", { x: -70, opacity: 0, duration: 0.75, ease: "power3.out" }, 48.3);
+      tl.from("#call-3 .icon", { rotation: 25, scale: 0.6, opacity: 0, duration: 0.6, ease: "back.out(1.6)" }, 48.55);
+      tl.from("#call-3 .tag", { opacity: 0, x: -12, duration: 0.45, ease: "power1.out" }, 48.7);
+      tl.from("#call-3 .body", { opacity: 0, y: 14, duration: 0.55, ease: "power2.out" }, 48.8);
+
+      /* SCENE 4 — 100.0 (expo.out, MCP turquoise) */
+      tl.from("#top-4 .top-logo", { opacity: 0, duration: 0.5, ease: "sine.out" }, 100.1);
+      tl.from("#top-4 .top-title", { y: -18, opacity: 0, duration: 0.7, ease: "expo.out" }, 100.2);
+      tl.from("#top-4 .dot", { opacity: 0, scale: 0.3, duration: 0.45, ease: "back.out(2)", stagger: 0.03 }, 100.15);
+      tl.from("#call-4", { x: -55, opacity: 0, duration: 0.7, ease: "expo.out" }, 100.3);
+      tl.from("#call-4 .icon", { scale: 0.4, opacity: 0, duration: 0.6, ease: "back.out(2.2)" }, 100.5);
+      tl.from("#call-4 .tag", { opacity: 0, letterSpacing: "0.05em", duration: 0.5, ease: "power2.out" }, 100.65);
+      tl.from("#call-4 .body", { opacity: 0, y: 18, duration: 0.6, ease: "power3.out" }, 100.75);
+
+      /* SCENE 5 — 132.0 (long scene; staggered name reveal) */
+      tl.from("#top-5 .top-logo", { opacity: 0, x: -18, duration: 0.55, ease: "power2.out" }, 132.1);
+      tl.from("#top-5 .top-title", { opacity: 0, y: 18, duration: 0.75, ease: "expo.out" }, 132.25);
+      tl.from("#top-5 .dot", { opacity: 0, duration: 0.5, ease: "power1.out", stagger: 0.04 }, 132.2);
+      tl.from("#call-5", { x: -60, opacity: 0, duration: 0.8, ease: "power3.out" }, 132.35);
+      tl.from("#call-5 .icon", { scale: 0.5, rotation: -15, opacity: 0, duration: 0.65, ease: "back.out(1.8)" }, 132.6);
+      tl.from("#call-5 .tag", { opacity: 0, duration: 0.45, ease: "sine.out" }, 132.75);
+      tl.from("#call-5 .body", { opacity: 0, x: 24, duration: 0.7, ease: "power2.out" }, 132.85);
+
+      /* SCENE 6 — 240.0 (short, punchy) */
+      tl.from("#top-6 .top-logo", { opacity: 0, duration: 0.45, ease: "power2.out" }, 240.1);
+      tl.from("#top-6 .top-title", { scale: 0.92, opacity: 0, duration: 0.55, ease: "back.out(1.4)" }, 240.2);
+      tl.from("#top-6 .dot", { opacity: 0, scale: 0.3, duration: 0.4, ease: "back.out(2)", stagger: 0.025 }, 240.18);
+      tl.from("#call-6", { x: -45, opacity: 0, duration: 0.55, ease: "power3.out" }, 240.3);
+      tl.from("#call-6 .icon", { scale: 0.3, opacity: 0, duration: 0.5, ease: "back.out(2.4)" }, 240.45);
+      tl.from("#call-6 .tag", { opacity: 0, y: 10, duration: 0.4, ease: "power2.out" }, 240.55);
+      tl.from("#call-6 .body", { opacity: 0, y: 12, duration: 0.5, ease: "power2.out" }, 240.62);
+
+      /* SCENE 7 — 260.0 (question mood, warmer ease) */
+      tl.from("#top-7 .top-logo", { opacity: 0, duration: 0.5, ease: "sine.out" }, 260.1);
+      tl.from("#top-7 .top-title", { y: -14, opacity: 0, duration: 0.65, ease: "power3.out" }, 260.2);
+      tl.from("#top-7 .dot", { opacity: 0, duration: 0.45, ease: "power1.out", stagger: 0.03 }, 260.15);
+      tl.from("#call-7", { x: -55, opacity: 0, duration: 0.7, ease: "power3.out" }, 260.3);
+      tl.from("#call-7 .icon", { rotation: 20, scale: 0.5, opacity: 0, duration: 0.6, ease: "back.out(1.8)" }, 260.5);
+      tl.from("#call-7 .tag", { opacity: 0, x: -10, duration: 0.5, ease: "power2.out" }, 260.65);
+      tl.from("#call-7 .body", { opacity: 0, y: 14, duration: 0.55, ease: "power2.out" }, 260.75);
+
+      /* SCENE 8 — 290.0 (write mood) */
+      tl.from("#top-8 .top-logo", { opacity: 0, x: -20, duration: 0.55, ease: "power2.out" }, 290.1);
+      tl.from("#top-8 .top-title", { opacity: 0, y: 14, duration: 0.65, ease: "expo.out" }, 290.22);
+      tl.from("#top-8 .dot", { opacity: 0, scale: 0.4, duration: 0.45, ease: "back.out(1.6)", stagger: 0.03 }, 290.18);
+      tl.from("#call-8", { x: -50, opacity: 0, duration: 0.7, ease: "power3.out" }, 290.3);
+      tl.from("#call-8 .icon", { scale: 0.5, opacity: 0, duration: 0.55, ease: "back.out(1.8)" }, 290.5);
+      tl.from("#call-8 .tag", { opacity: 0, duration: 0.45, ease: "sine.out" }, 290.65);
+      tl.from("#call-8 .body", { opacity: 0, y: 16, duration: 0.6, ease: "power2.out" }, 290.75);
+
+      /* SCENE 9 — 360.0 (agents parallel — mirror scene 5 energy but different easings) */
+      tl.from("#top-9 .top-logo", { opacity: 0, duration: 0.5, ease: "sine.out" }, 360.1);
+      tl.from("#top-9 .top-title", { scale: 0.94, opacity: 0, duration: 0.7, ease: "back.out(1.2)" }, 360.22);
+      tl.from("#top-9 .dot", { opacity: 0, y: -8, duration: 0.45, ease: "power2.out", stagger: 0.03 }, 360.18);
+      tl.from("#call-9", { x: -60, opacity: 0, duration: 0.75, ease: "expo.out" }, 360.3);
+      tl.from("#call-9 .icon", { rotation: -15, scale: 0.5, opacity: 0, duration: 0.6, ease: "back.out(1.8)" }, 360.55);
+      tl.from("#call-9 .tag", { opacity: 0, x: -10, duration: 0.5, ease: "power1.out" }, 360.7);
+      tl.from("#call-9 .body", { opacity: 0, y: 14, duration: 0.6, ease: "power3.out" }, 360.8);
+
+      /* SCENE 10 — 420.0 (upload, firm) */
+      tl.from("#top-10 .top-logo", { opacity: 0, x: -18, duration: 0.55, ease: "power2.out" }, 420.1);
+      tl.from("#top-10 .top-title", { y: -16, opacity: 0, duration: 0.65, ease: "power3.out" }, 420.22);
+      tl.from("#top-10 .dot", { opacity: 0, scale: 0.3, duration: 0.45, ease: "back.out(2)", stagger: 0.025 }, 420.18);
+      tl.from("#call-10", { x: -55, opacity: 0, duration: 0.7, ease: "expo.out" }, 420.3);
+      tl.from("#call-10 .icon", { scale: 0.5, opacity: 0, duration: 0.55, ease: "back.out(1.8)" }, 420.5);
+      tl.from("#call-10 .tag", { opacity: 0, duration: 0.45, ease: "sine.out" }, 420.65);
+      tl.from("#call-10 .body", { opacity: 0, y: 14, duration: 0.6, ease: "power2.out" }, 420.75);
+
+      /* ============================================================
+         SCENE 11 — OUTRO COVER (460.0 - 470.62)
+         ============================================================ */
+      tl.from("#outro-eyebrow", { opacity: 0, letterSpacing: "0.2em", duration: 0.7, ease: "power2.out" }, 460.2);
+      tl.from("#outro-stat", { scale: 0.8, opacity: 0, duration: 1.0, ease: "expo.out" }, 460.5);
+      tl.from("#outro-rule", { scaleX: 0, opacity: 0, transformOrigin: "center", duration: 0.6, ease: "power3.out" }, 461.2);
+      tl.from("#outro-label", { y: 24, opacity: 0, duration: 0.8, ease: "power2.out" }, 461.4);
+      tl.from("#outro-logo", { opacity: 0, y: 20, duration: 0.8, ease: "power2.out" }, 461.8);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

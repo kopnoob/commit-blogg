@@ -1,0 +1,16 @@
+.DS_Store
+.agents/
+.claude/
+skills-lock.json
+
+# Store kildefiler og arbeidsmapper utenfor Pages-innholdet
+Tilbud_demo.mp4
+Commit@Interago.pptx
+commit-interago-video/
+jakob-bursdag/
+
+# Hyperframes working artifacts
+tilbud-animation/Tilbud_demo.mp4
+tilbud-animation/tilbud-animation-draft.mp4
+tilbud-animation/renders/
+tilbud-animation/work-*/

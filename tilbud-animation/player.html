@@ -1,0 +1,1180 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#05080f" />
+    <title>Tilbud-demo &mdash; forh&aring;ndsvisning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <style>
+      /* reset */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        background: #05080f;
+        font-family: "Manrope", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        color: #ffffff;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* shell */
+      .shell {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        gap: 18px;
+      }
+      .stage-wrap {
+        width: min(100vw - 48px, calc((100vh - 220px) * 1920 / 1080));
+        max-width: 1920px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      /* mobile panel — hidden on desktop */
+      .mobile-panel { display: none; }
+      .stage {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1920 / 1080;
+        background: #0a0f1a;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
+        /* scale inner 1920x1080 to fit */
+        container-type: inline-size;
+      }
+      .stage-inner {
+        position: absolute;
+        top: 0; left: 0;
+        width: 1920px;
+        height: 1080px;
+        transform-origin: top left;
+      }
+
+      /* video */
+      .video-el {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: #0a0f1a;
+      }
+      .ambient-glow {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 900px;
+        height: 900px;
+        background: radial-gradient(circle, rgba(43,122,179,0.08) 0%, rgba(10,15,26,0) 70%);
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      /* top bar */
+      .top-bar {
+        position: absolute;
+        top: 0; left: 0;
+        width: 1920px;
+        height: 138px;
+        background: #0a0f1a;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        display: flex;
+        align-items: center;
+        padding: 0 48px;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .top-bar.visible { opacity: 1; }
+      .top-logo {
+        height: 62px;
+        width: auto;
+        filter: brightness(0) invert(1);
+        flex-shrink: 0;
+      }
+      .top-center {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0 32px;
+        gap: 14px;
+      }
+      .top-title {
+        font-weight: 700;
+        font-size: 34px;
+        color: #ffffff;
+        letter-spacing: -0.02em;
+        text-align: center;
+        line-height: 1.1;
+        max-width: 1100px;
+        transition: opacity 0.3s ease;
+      }
+      .top-title .step-tag {
+        color: #2b7ab3;
+        font-weight: 800;
+        margin-right: 14px;
+      }
+      .top-progress-row {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .progress-track {
+        width: 560px;
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(255,255,255,0.1);
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #2b7ab3, #5aa0d4);
+        border-radius: 3px;
+        transition: width 0.1s linear;
+      }
+      .countdown {
+        font-size: 17px;
+        color: #8a9bb0;
+        font-variant-numeric: tabular-nums;
+        font-weight: 500;
+        min-width: 80px;
+      }
+      .dots {
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+        align-items: center;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.18);
+        transition: background 0.3s ease, box-shadow 0.3s ease;
+      }
+      .dot.done { background: rgba(90,160,212,0.55); }
+      .dot.active {
+        background: #2b7ab3;
+        box-shadow: 0 0 12px rgba(43,122,179,0.6);
+      }
+
+      /* bottom callout */
+      .callout {
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 1920px;
+        height: 138px;
+        display: flex;
+        align-items: center;
+        padding: 0 48px 0 40px;
+        gap: 28px;
+        background: #0a0f1a;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        border-left: 8px solid #1d4e7a;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.3s ease, border-left-color 0.3s ease;
+      }
+      .callout.visible { opacity: 1; }
+      .callout .icon {
+        font-size: 46px;
+        line-height: 1;
+        width: 64px;
+        height: 64px;
+        text-align: center;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .callout .meta {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1;
+        min-width: 0;
+      }
+      .callout .tag {
+        font-weight: 800;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #8a9bb0;
+        transition: color 0.3s ease;
+      }
+      .callout .body {
+        font-weight: 500;
+        font-size: 26px;
+        color: #ffffff;
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+        max-width: 1300px;
+      }
+      .callout .body strong {
+        font-weight: 800;
+        color: #ffffff;
+      }
+      /* category tints */
+      .callout.tools { border-left-color: #1d4e7a; }
+      .callout.tools .tag { color: #5aa0d4; }
+      .callout.mcp { border-left-color: #2cb5bc; }
+      .callout.mcp .tag { color: #2cb5bc; }
+      .callout.skills { border-left-color: #a067e5; }
+      .callout.skills .tag { color: #a067e5; }
+      .callout.hooks { border-left-color: #7ec878; }
+      .callout.hooks .tag { color: #7ec878; }
+      .callout.ask { border-left-color: #e8c37a; }
+      .callout.ask .tag { color: #e8c37a; }
+      .callout.prompt { border-left-color: #e8c37a; }
+      .callout.prompt .tag { color: #e8c37a; }
+      .callout.agents { border-left-color: #2cb5bc; }
+      .callout.agents .tag { color: #2cb5bc; }
+      .callout.result { border-left-color: #7ec878; }
+      .callout.result .tag { color: #7ec878; }
+      .callout.write { border-left-color: #5aa0d4; }
+      .callout.write .tag { color: #5aa0d4; }
+
+      /* chips */
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+      .chip {
+        width: 72px;
+        height: 46px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.14);
+        background: rgba(255,255,255,0.03);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        transition: opacity 0.3s ease, border-color 0.3s ease,
+                    box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
+        opacity: 0.3;
+      }
+      .chip .chip-icon {
+        font-size: 16px;
+        line-height: 1;
+      }
+      .chip .chip-label {
+        font-size: 9px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: #8a9bb0;
+      }
+      .chip.used { opacity: 0.55; }
+      .chip.active { opacity: 1; }
+      .chip.active.tools { border-color: #5aa0d4; background: rgba(90,160,212,0.15); box-shadow: 0 0 16px rgba(90,160,212,0.4); }
+      .chip.active.tools .chip-label { color: #5aa0d4; }
+      .chip.active.mcp { border-color: #2cb5bc; background: rgba(44,181,188,0.15); box-shadow: 0 0 16px rgba(44,181,188,0.4); }
+      .chip.active.mcp .chip-label { color: #2cb5bc; }
+      .chip.active.skills { border-color: #a067e5; background: rgba(160,103,229,0.15); box-shadow: 0 0 16px rgba(160,103,229,0.4); }
+      .chip.active.skills .chip-label { color: #a067e5; }
+      .chip.active.hooks { border-color: #7ec878; background: rgba(126,200,120,0.15); box-shadow: 0 0 16px rgba(126,200,120,0.4); }
+      .chip.active.hooks .chip-label { color: #7ec878; }
+      .chip.active.cli { border-color: #e8c37a; background: rgba(232,195,122,0.15); box-shadow: 0 0 16px rgba(232,195,122,0.4); }
+      .chip.active.cli .chip-label { color: #e8c37a; }
+
+      /* cover screens */
+      .cover {
+        position: absolute;
+        inset: 0;
+        background: #0a0f1a;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0 120px;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+      }
+      .cover.visible { opacity: 1; pointer-events: auto; }
+      .cover::before {
+        content: "";
+        position: absolute;
+        width: 1400px;
+        height: 1400px;
+        background: radial-gradient(circle, rgba(43,122,179,0.22) 0%, rgba(10,15,26,0) 65%);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      .cover-inner {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 32px;
+        max-width: 1600px;
+      }
+      .cover-logo {
+        height: 96px;
+        width: auto;
+        filter: brightness(0) invert(1);
+        margin-bottom: 18px;
+      }
+      .eyebrow {
+        font-weight: 800;
+        font-size: 22px;
+        letter-spacing: 0.38em;
+        text-transform: uppercase;
+        color: #2b7ab3;
+      }
+      .cover-title {
+        font-weight: 800;
+        font-size: 110px;
+        line-height: 1.02;
+        letter-spacing: -0.035em;
+        color: #ffffff;
+        max-width: 1500px;
+      }
+      .cover-title .accent { color: #2b7ab3; }
+      .cover-subtitle {
+        font-weight: 400;
+        font-size: 34px;
+        color: #8a9bb0;
+        letter-spacing: -0.005em;
+        max-width: 1200px;
+        line-height: 1.35;
+      }
+      .rule {
+        width: 120px;
+        height: 3px;
+        background: #2b7ab3;
+        margin: 12px 0;
+      }
+      .outro-stat {
+        font-weight: 800;
+        font-size: 220px;
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+        color: #ffffff;
+        font-variant-numeric: tabular-nums;
+      }
+      .outro-stat .unit {
+        color: #2b7ab3;
+        font-size: 90px;
+        letter-spacing: -0.02em;
+        margin-left: 14px;
+      }
+      .outro-speednote {
+        font-weight: 400;
+        font-size: 22px;
+        color: #8a9bb0;
+        letter-spacing: 0.02em;
+        margin-top: -14px;
+      }
+      .outro-label {
+        font-weight: 500;
+        font-size: 38px;
+        color: #ffffff;
+        letter-spacing: -0.005em;
+        max-width: 1300px;
+      }
+
+      /* scrubber */
+      .scrubber {
+        width: 100%;
+        display: flex;
+        gap: 3px;
+        height: 14px;
+      }
+      .seg {
+        flex: 1;
+        height: 100%;
+        border-radius: 3px;
+        background: rgba(255,255,255,0.08);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        border: none;
+        padding: 0;
+        transition: background 0.2s ease;
+      }
+      .seg:hover { background: rgba(255,255,255,0.16); }
+      .seg.intro, .seg.outro {
+        background: rgba(255,255,255,0.05);
+        flex: 0.5;
+      }
+      .seg.visited { background: rgba(90,160,212,0.3); }
+      .seg.active {
+        background: rgba(43,122,179,0.25);
+      }
+      .seg .seg-fill {
+        position: absolute;
+        top: 0; left: 0; bottom: 0;
+        width: 0%;
+        background: #2b7ab3;
+        transition: width 0.1s linear;
+      }
+      .seg .seg-label {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 800;
+        color: rgba(255,255,255,0.55);
+        letter-spacing: 0.1em;
+        pointer-events: none;
+      }
+
+      /* controls */
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 8px 4px;
+        color: #8a9bb0;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .ctrl-btn {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: #ffffff;
+        padding: 8px 14px;
+        border-radius: 6px;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        letter-spacing: 0.02em;
+        transition: background 0.2s ease, border-color 0.2s ease;
+      }
+      .ctrl-btn:hover {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.22);
+      }
+      .ctrl-btn.primary {
+        background: #2b7ab3;
+        border-color: #2b7ab3;
+        min-width: 72px;
+      }
+      .ctrl-btn.primary:hover {
+        background: #3688c1;
+        border-color: #3688c1;
+      }
+      .time-display {
+        font-variant-numeric: tabular-nums;
+        color: #ffffff;
+        min-width: 110px;
+        font-weight: 700;
+      }
+      .keyhint {
+        margin-left: auto;
+        font-size: 12px;
+        color: #6a7a90;
+        letter-spacing: 0.02em;
+      }
+      .keyhint kbd {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.14);
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-family: inherit;
+        font-size: 11px;
+        color: #ffffff;
+        margin: 0 2px;
+      }
+      .ctrl-btn.hidden { display: none; }
+
+      /* ============ MOBILE ============ */
+      @media (max-width: 900px) {
+        .shell { padding: 0; gap: 0; }
+        .stage-wrap {
+          width: 100vw;
+          max-width: 100vw;
+          gap: 0;
+        }
+        .stage {
+          border-radius: 0;
+          box-shadow: none;
+        }
+        /* hide in-stage bars on mobile — replaced by native panel below */
+        .top-bar, .callout { display: none !important; }
+        .cover { padding: 0 20px; }
+        .cover-logo { height: 44px; margin-bottom: 6px; }
+        .eyebrow { font-size: 11px; letter-spacing: 0.28em; }
+        .cover-title { font-size: 38px; line-height: 1.05; }
+        .cover-subtitle { font-size: 15px; line-height: 1.4; }
+        .rule { width: 60px; height: 2px; margin: 8px 0; }
+        .outro-stat { font-size: 110px; }
+        .outro-stat .unit { font-size: 40px; margin-left: 6px; }
+        .outro-speednote { font-size: 12px; margin-top: -6px; }
+        .outro-label { font-size: 16px; }
+        .cover-inner { gap: 14px; }
+
+        .mobile-panel {
+          display: flex;
+          flex-direction: column;
+          width: 100vw;
+          padding: 14px 16px 10px;
+          gap: 12px;
+          background: #0a0f1a;
+          border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .m-head {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 12px;
+        }
+        .m-step {
+          font-weight: 800;
+          font-size: 15px;
+          color: #ffffff;
+          letter-spacing: -0.01em;
+          line-height: 1.2;
+          flex: 1;
+          min-width: 0;
+        }
+        .m-step .step-tag {
+          color: #2b7ab3;
+          font-weight: 800;
+          margin-right: 8px;
+        }
+        .m-countdown {
+          font-size: 13px;
+          color: #8a9bb0;
+          font-variant-numeric: tabular-nums;
+          font-weight: 600;
+          flex-shrink: 0;
+        }
+        .m-progress {
+          height: 4px;
+          background: rgba(255,255,255,0.1);
+          border-radius: 2px;
+          overflow: hidden;
+        }
+        .m-progress-fill {
+          height: 100%;
+          width: 0%;
+          background: linear-gradient(90deg, #2b7ab3, #5aa0d4);
+          transition: width 0.1s linear;
+        }
+        .m-callout {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          padding: 10px 0 2px;
+          border-left: 4px solid #1d4e7a;
+          padding-left: 12px;
+          transition: border-left-color 0.3s ease;
+        }
+        .m-callout.tools { border-left-color: #5aa0d4; }
+        .m-callout.mcp { border-left-color: #2cb5bc; }
+        .m-callout.skills { border-left-color: #a067e5; }
+        .m-callout.hooks { border-left-color: #7ec878; }
+        .m-callout.ask { border-left-color: #e8c37a; }
+        .m-callout.prompt { border-left-color: #e8c37a; }
+        .m-callout.agents { border-left-color: #2cb5bc; }
+        .m-callout.result { border-left-color: #7ec878; }
+        .m-callout.write { border-left-color: #5aa0d4; }
+        .m-icon { font-size: 24px; line-height: 1; flex-shrink: 0; }
+        .m-meta { flex: 1; min-width: 0; }
+        .m-tag {
+          font-size: 10px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          font-weight: 800;
+          color: #8a9bb0;
+          margin-bottom: 4px;
+          transition: color 0.3s ease;
+        }
+        .m-callout.tools .m-tag { color: #5aa0d4; }
+        .m-callout.mcp .m-tag { color: #2cb5bc; }
+        .m-callout.skills .m-tag { color: #a067e5; }
+        .m-callout.hooks .m-tag { color: #7ec878; }
+        .m-callout.ask .m-tag { color: #e8c37a; }
+        .m-callout.prompt .m-tag { color: #e8c37a; }
+        .m-callout.agents .m-tag { color: #2cb5bc; }
+        .m-callout.result .m-tag { color: #7ec878; }
+        .m-callout.write .m-tag { color: #5aa0d4; }
+        .m-body {
+          font-size: 13px;
+          line-height: 1.4;
+          color: #ffffff;
+          font-weight: 500;
+        }
+        .m-body strong { font-weight: 800; }
+        .m-chips {
+          display: flex;
+          gap: 6px;
+          overflow-x: auto;
+          padding-bottom: 2px;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+        .m-chips::-webkit-scrollbar { display: none; }
+        .m-chip {
+          flex-shrink: 0;
+          padding: 6px 10px;
+          border-radius: 6px;
+          border: 1px solid rgba(255,255,255,0.14);
+          background: rgba(255,255,255,0.03);
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: opacity 0.3s ease, border-color 0.3s ease,
+                      background 0.3s ease, box-shadow 0.3s ease;
+          opacity: 0.35;
+        }
+        .m-chip .m-chip-icon { font-size: 12px; }
+        .m-chip .m-chip-label {
+          font-size: 10px;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          font-weight: 800;
+          color: #8a9bb0;
+        }
+        .m-chip.used { opacity: 0.6; }
+        .m-chip.active { opacity: 1; }
+        .m-chip.active.tools { border-color: #5aa0d4; background: rgba(90,160,212,0.18); }
+        .m-chip.active.tools .m-chip-label { color: #5aa0d4; }
+        .m-chip.active.mcp { border-color: #2cb5bc; background: rgba(44,181,188,0.18); }
+        .m-chip.active.mcp .m-chip-label { color: #2cb5bc; }
+        .m-chip.active.skills { border-color: #a067e5; background: rgba(160,103,229,0.18); }
+        .m-chip.active.skills .m-chip-label { color: #a067e5; }
+        .m-chip.active.hooks { border-color: #7ec878; background: rgba(126,200,120,0.18); }
+        .m-chip.active.hooks .m-chip-label { color: #7ec878; }
+        .m-chip.active.cli { border-color: #e8c37a; background: rgba(232,195,122,0.18); }
+        .m-chip.active.cli .m-chip-label { color: #e8c37a; }
+
+        /* scrubber — taller + bigger touch targets */
+        .scrubber {
+          height: 32px;
+          gap: 2px;
+          padding: 8px 12px 0;
+          width: 100%;
+        }
+        .seg { border-radius: 4px; min-height: 24px; }
+        .seg .seg-label { font-size: 11px; }
+
+        /* controls row */
+        .controls {
+          padding: 10px 12px 14px;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+        .ctrl-btn {
+          padding: 10px 14px;
+          font-size: 14px;
+          min-height: 40px;
+          flex: 1;
+          min-width: 0;
+        }
+        .ctrl-btn.primary { flex: 2; }
+        .time-display {
+          font-size: 12px;
+          min-width: 0;
+          flex-basis: 100%;
+          order: -1;
+          text-align: center;
+          padding-bottom: 2px;
+        }
+        .keyhint { display: none; }
+      }
+
+      /* very small phones */
+      @media (max-width: 380px) {
+        .m-step { font-size: 14px; }
+        .cover-title { font-size: 30px; }
+        .outro-stat { font-size: 84px; }
+        .outro-stat .unit { font-size: 30px; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- shell -->
+    <div class="shell">
+      <div class="stage-wrap">
+        <!-- stage -->
+        <div class="stage" id="stage">
+          <div class="stage-inner" id="stage-inner">
+            <div class="ambient-glow"></div>
+
+            <video id="video" class="video-el" muted playsinline preload="metadata" crossorigin="anonymous">
+              <source id="video-src-web" src="Tilbud_demo_web.mp4" type="video/mp4" />
+              <source id="video-src-orig" src="Tilbud_demo.mp4" type="video/mp4" />
+            </video>
+            <div id="video-status" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,15,26,0.85);z-index:15;font-size:18px;color:#8a9bb0;pointer-events:none;opacity:0;transition:opacity 0.3s ease;">Laster video&hellip;</div>
+
+            <!-- intro cover -->
+            <div class="cover" id="cover-intro">
+              <div class="cover-inner">
+                <img src="commit_logo.png" alt="Commit" class="cover-logo" />
+                <div class="eyebrow">CLAUDE-PLATTFORMEN I PRAKSIS</div>
+                <div class="cover-title">
+                  Fra Mercell-invitasjon<br/>til <span class="accent">klart tilbud</span>
+                </div>
+                <div class="rule"></div>
+                <div class="cover-subtitle">
+                  Ti trinn fra e-post i innboksen til ferdig utfylt tilbud lastet opp i Mercell &mdash; uten menneskelig tastetrykk underveis.
+                </div>
+              </div>
+            </div>
+
+            <!-- top bar -->
+            <div class="top-bar" id="top-bar">
+              <img src="commit_logo.png" alt="Commit" class="top-logo" />
+              <div class="top-center">
+                <div class="top-title" id="top-title">
+                  <span class="step-tag" id="step-tag">TRINN 1</span><span id="step-title">Forespørsel mottatt</span>
+                </div>
+                <div class="top-progress-row">
+                  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+                  <div class="countdown" id="countdown">0:00 igjen</div>
+                </div>
+              </div>
+              <div class="dots" id="dots">
+                <div class="dot" data-idx="1"></div>
+                <div class="dot" data-idx="2"></div>
+                <div class="dot" data-idx="3"></div>
+                <div class="dot" data-idx="4"></div>
+                <div class="dot" data-idx="5"></div>
+                <div class="dot" data-idx="6"></div>
+                <div class="dot" data-idx="7"></div>
+                <div class="dot" data-idx="8"></div>
+                <div class="dot" data-idx="9"></div>
+                <div class="dot" data-idx="10"></div>
+              </div>
+            </div>
+
+            <!-- callout -->
+            <div class="callout" id="callout">
+              <div class="icon" id="callout-icon">&#128104;&#8205;&#128187;</div>
+              <div class="meta">
+                <div class="tag" id="callout-tag">PROMPT</div>
+                <div class="body" id="callout-body"></div>
+              </div>
+              <div class="chips" id="chips">
+                <div class="chip tools" data-cat="tools">
+                  <div class="chip-icon">&#128295;</div>
+                  <div class="chip-label">Tools</div>
+                </div>
+                <div class="chip mcp" data-cat="mcp">
+                  <div class="chip-icon">&#128268;</div>
+                  <div class="chip-label">MCP</div>
+                </div>
+                <div class="chip skills" data-cat="skills">
+                  <div class="chip-icon">&#127919;</div>
+                  <div class="chip-label">Skills</div>
+                </div>
+                <div class="chip hooks" data-cat="hooks">
+                  <div class="chip-icon">&#129706;</div>
+                  <div class="chip-label">Hooks</div>
+                </div>
+                <div class="chip cli" data-cat="cli">
+                  <div class="chip-icon">&#128187;</div>
+                  <div class="chip-label">CLI</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- outro cover -->
+            <div class="cover" id="cover-outro">
+              <div class="cover-inner">
+                <div class="eyebrow">FRA E-POST TIL KLART TILBUD</div>
+                <div class="outro-stat">15:40<span class="unit">MIN</span></div>
+                <div class="outro-speednote">vist i 2x hastighet &mdash; faktisk arbeidstid</div>
+                <div class="rule"></div>
+                <div class="outro-label">Ti trinn &middot; tre agenter i parallell &middot; ett klikk for innsending</div>
+                <img src="commit_logo.png" alt="Commit" class="cover-logo" style="margin-top: 40px; margin-bottom: 0;" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- mobile panel -->
+        <div class="mobile-panel" id="mobile-panel">
+          <div class="m-head">
+            <div class="m-step">
+              <span class="step-tag" id="m-step-tag">TRINN 1</span><span id="m-step-title">Forespørsel mottatt</span>
+            </div>
+            <div class="m-countdown" id="m-countdown">0:00 igjen</div>
+          </div>
+          <div class="m-progress"><div class="m-progress-fill" id="m-progress-fill"></div></div>
+          <div class="m-callout" id="m-callout">
+            <div class="m-icon" id="m-icon">&#128104;&#8205;&#128187;</div>
+            <div class="m-meta">
+              <div class="m-tag" id="m-tag">PROMPT</div>
+              <div class="m-body" id="m-body"></div>
+            </div>
+          </div>
+          <div class="m-chips" id="m-chips">
+            <div class="m-chip tools" data-cat="tools"><span class="m-chip-icon">&#128295;</span><span class="m-chip-label">Tools</span></div>
+            <div class="m-chip mcp" data-cat="mcp"><span class="m-chip-icon">&#128268;</span><span class="m-chip-label">MCP</span></div>
+            <div class="m-chip skills" data-cat="skills"><span class="m-chip-icon">&#127919;</span><span class="m-chip-label">Skills</span></div>
+            <div class="m-chip hooks" data-cat="hooks"><span class="m-chip-icon">&#129706;</span><span class="m-chip-label">Hooks</span></div>
+            <div class="m-chip cli" data-cat="cli"><span class="m-chip-icon">&#128187;</span><span class="m-chip-label">CLI</span></div>
+          </div>
+        </div>
+
+        <!-- scrubber -->
+        <div class="scrubber" id="scrubber"></div>
+
+        <!-- controls -->
+        <div class="controls">
+          <button class="ctrl-btn primary" id="btn-play">Spill</button>
+          <button class="ctrl-btn" id="btn-restart">Start p&aring; nytt</button>
+          <div class="time-display" id="time-display">0:00 / 7:50</div>
+          <div class="keyhint">
+            <kbd>1</kbd>&ndash;<kbd>0</kbd> hopp &middot; <kbd>space</kbd> pause &middot; <kbd>&larr;</kbd>/<kbd>&rarr;</kbd> trinn &middot; <kbd>R</kbd> restart
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // data
+      const INTRO = { start: 0, end: 16 };
+      const OUTRO = { start: 460, end: 470.62 };
+      const TOTAL = 470.62;
+
+      const SCENES = [
+        { step: 1,  start: 16,  end: 32,  title: 'Forespørsel mottatt',
+          tag: 'PROMPT', icon: '\uD83D\uDC68\u200D\uD83D\uDCBB', colorClass: 'prompt',
+          body: 'Øystein ber Claude: <strong>sjekk utlysningen mot Cinode og bygg tilbud klart i Mercell</strong>',
+          categories: [] },
+        { step: 2,  start: 32,  end: 48,  title: 'Skill aktiveres',
+          tag: 'SKILLS', icon: '\uD83C\uDFAF', colorClass: 'skills',
+          body: '<strong>mercell-tilbud</strong> — skill laster inn firmamaler, prosedyre og tilganger automatisk',
+          categories: ['skills'] },
+        { step: 3,  start: 48,  end: 100, title: 'Henter konkurransegrunnlag',
+          tag: 'TOOLS', icon: '\uD83D\uDEE0', colorClass: 'tools',
+          body: '<strong>Playwright</strong> logger inn i Mercell via CLI · <strong>Python3</strong> konverterer 10 DOCX-er parallelt',
+          categories: ['skills', 'cli', 'tools'] },
+        { step: 4,  start: 100, end: 132, title: 'Semantisk søk i Cinode',
+          tag: 'MCP', icon: '\uD83D\uDCA1', colorClass: 'mcp',
+          body: 'Cinode <strong>search-employees-by-skill</strong> — fem søk: Java, Spring Boot, Backend, Kotlin, Microservices, Kubernetes',
+          categories: ['skills', 'mcp'] },
+        { step: 5,  start: 132, end: 240, title: 'Tre parallelle analyse-agenter',
+          tag: 'AGENTS', icon: '\uD83E\uDD16', colorClass: 'agents',
+          body: '<strong>Øyvind Julsrud · Nils Ove Tendenes · Sigbjørn Myhre</strong> — hver dypanalysert mot Java-kravene',
+          categories: ['skills', 'tools'] },
+        { step: 6,  start: 240, end: 260, title: 'Analysen er ferdig',
+          tag: 'RESULT', icon: '\u2713', colorClass: 'result',
+          body: 'Alle tre kandidater rangert etter <strong>A- og B-krav</strong> med konkrete kildehenvisninger',
+          categories: ['skills'] },
+        { step: 7,  start: 260, end: 290, title: 'Claude spør deg',
+          tag: 'ASK USER QUESTION', icon: '\u2753', colorClass: 'ask',
+          body: '<strong>AskUserQuestion</strong> — kandidat, timepris, reise, signatur',
+          categories: ['skills', 'tools'] },
+        { step: 8,  start: 290, end: 360, title: 'Samler all kontekst',
+          tag: 'WRITE', icon: '\uD83D\uDCDD', colorClass: 'write',
+          body: '<strong>CONFIG.md</strong> generert — 237 linjer med alt dokument-agentene trenger',
+          categories: ['skills', 'tools'] },
+        { step: 9,  start: 360, end: 420, title: 'Fire dokument-agenter i parallell',
+          tag: 'AGENTS', icon: '\uD83E\uDD16', colorClass: 'agents',
+          body: '<strong>Tilbudsbrev · Egenerklæring · Vedlegg 1 · Bilag 1–8</strong> — genereres samtidig',
+          categories: ['skills', 'tools'] },
+        { step: 10, start: 420, end: 460, title: 'Opplasting til Mercell',
+          tag: 'TOOLS', icon: '\uD83D\uDEE0', colorClass: 'tools',
+          body: '<strong>Playwright</strong> laster opp alle fire dokumenter til innsending-fanen i Mercell',
+          categories: ['skills', 'cli'] },
+      ];
+      const HOOKS_ALWAYS_ON = true;
+
+      // refs
+      const video = document.getElementById('video');
+      const topBar = document.getElementById('top-bar');
+      const callout = document.getElementById('callout');
+      const stepTag = document.getElementById('step-tag');
+      const stepTitle = document.getElementById('step-title');
+      const progressFill = document.getElementById('progress-fill');
+      const countdown = document.getElementById('countdown');
+      const calloutIcon = document.getElementById('callout-icon');
+      const calloutTag = document.getElementById('callout-tag');
+      const calloutBody = document.getElementById('callout-body');
+      const coverIntro = document.getElementById('cover-intro');
+      const coverOutro = document.getElementById('cover-outro');
+      const dotsWrap = document.getElementById('dots');
+      const chipsWrap = document.getElementById('chips');
+      const scrubber = document.getElementById('scrubber');
+      const btnPlay = document.getElementById('btn-play');
+      const btnRestart = document.getElementById('btn-restart');
+      const timeDisplay = document.getElementById('time-display');
+      const stageInner = document.getElementById('stage-inner');
+      const stage = document.getElementById('stage');
+      // mobile refs
+      const mobilePanel = document.getElementById('mobile-panel');
+      const mStepTag = document.getElementById('m-step-tag');
+      const mStepTitle = document.getElementById('m-step-title');
+      const mCountdown = document.getElementById('m-countdown');
+      const mProgressFill = document.getElementById('m-progress-fill');
+      const mCallout = document.getElementById('m-callout');
+      const mIcon = document.getElementById('m-icon');
+      const mTag = document.getElementById('m-tag');
+      const mBody = document.getElementById('m-body');
+      const mChipsWrap = document.getElementById('m-chips');
+
+      // scale
+      function fitStage() {
+        const w = stage.clientWidth;
+        const h = stage.clientHeight;
+        const sx = w / 1920;
+        const sy = h / 1080;
+        const s = Math.min(sx, sy);
+        stageInner.style.transform = `scale(${s})`;
+        stageInner.style.width = `${1920}px`;
+        stageInner.style.height = `${1080}px`;
+      }
+      window.addEventListener('resize', fitStage);
+
+      // format
+      function fmt(t) {
+        t = Math.max(0, t);
+        const m = Math.floor(t / 60);
+        const s = Math.floor(t % 60);
+        return `${m}:${s.toString().padStart(2, '0')}`;
+      }
+
+      // scrubber
+      function buildScrubber() {
+        const segs = [];
+        segs.push({ type: 'intro', start: INTRO.start, end: INTRO.end, label: 'INTRO' });
+        SCENES.forEach(sc => {
+          segs.push({ type: 'scene', scene: sc, start: sc.start, end: sc.end, label: String(sc.step) });
+        });
+        segs.push({ type: 'outro', start: OUTRO.start, end: OUTRO.end, label: 'OUTRO' });
+
+        segs.forEach(seg => {
+          const btn = document.createElement('button');
+          btn.className = `seg ${seg.type}`;
+          const duration = seg.end - seg.start;
+          if (seg.type === 'scene') {
+            btn.style.flex = String(duration);
+          } else {
+            btn.style.flex = String(duration * 0.6);
+          }
+          btn.dataset.start = seg.start;
+          btn.dataset.end = seg.end;
+          btn.dataset.type = seg.type;
+          btn.innerHTML = `<div class="seg-fill"></div><div class="seg-label">${seg.label}</div>`;
+          btn.addEventListener('click', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            video.currentTime = seg.start + ratio * (seg.end - seg.start);
+            if (video.paused) video.play().catch(() => {});
+          });
+          scrubber.appendChild(btn);
+        });
+      }
+      buildScrubber();
+
+      // state
+      let lastSceneIdx = -2;
+      const visitedScenes = new Set();
+
+      // update
+      function update() {
+        const t = video.currentTime || 0;
+
+        timeDisplay.textContent = `${fmt(t)} / ${fmt(TOTAL)}`;
+
+        // intro/outro
+        const inIntro = t < INTRO.end;
+        const inOutro = t >= OUTRO.start;
+        coverIntro.classList.toggle('visible', inIntro);
+        coverOutro.classList.toggle('visible', inOutro);
+
+        // find scene
+        let sceneIdx = -1;
+        for (let i = 0; i < SCENES.length; i++) {
+          if (t >= SCENES[i].start && t < SCENES[i].end) { sceneIdx = i; break; }
+        }
+
+        const showOverlay = !inIntro && !inOutro && sceneIdx !== -1;
+        topBar.classList.toggle('visible', showOverlay);
+        callout.classList.toggle('visible', showOverlay);
+
+        if (sceneIdx !== -1) {
+          const sc = SCENES[sceneIdx];
+          visitedScenes.add(sc.step);
+
+          if (sceneIdx !== lastSceneIdx) {
+            lastSceneIdx = sceneIdx;
+            stepTag.textContent = `TRINN ${sc.step}`;
+            stepTitle.textContent = sc.title;
+            calloutIcon.innerHTML = sc.icon;
+            calloutTag.textContent = sc.tag;
+            calloutBody.innerHTML = sc.body;
+            callout.className = `callout visible ${sc.colorClass}`;
+
+            // mobile mirror
+            mStepTag.textContent = `TRINN ${sc.step}`;
+            mStepTitle.textContent = sc.title;
+            mIcon.innerHTML = sc.icon;
+            mTag.textContent = sc.tag;
+            mBody.innerHTML = sc.body;
+            mCallout.className = `m-callout ${sc.colorClass}`;
+
+            // dots
+            dotsWrap.querySelectorAll('.dot').forEach(d => {
+              const idx = parseInt(d.dataset.idx, 10);
+              d.classList.remove('active', 'done');
+              if (idx === sc.step) d.classList.add('active');
+              else if (idx < sc.step) d.classList.add('done');
+            });
+
+            // chips (desktop + mobile)
+            updateChips(sc);
+          }
+
+          // progress + countdown
+          const dur = sc.end - sc.start;
+          const pct = Math.min(100, Math.max(0, ((t - sc.start) / dur) * 100));
+          progressFill.style.width = `${pct}%`;
+          mProgressFill.style.width = `${pct}%`;
+          const remainText = `${fmt(sc.end - t)} igjen`;
+          countdown.textContent = remainText;
+          mCountdown.textContent = remainText;
+        } else {
+          lastSceneIdx = -1;
+        }
+
+        // scrubber
+        updateScrubber(t, sceneIdx);
+      }
+
+      function updateChips(sc) {
+        const activeSet = new Set(sc.categories);
+        const prevScenes = SCENES.slice(0, SCENES.indexOf(sc));
+        const applyTo = (nodes, activeCls, usedCls) => {
+          nodes.forEach(ch => {
+            const cat = ch.dataset.cat;
+            ch.classList.remove(activeCls, usedCls);
+            if (cat === 'hooks') {
+              ch.classList.add(usedCls);
+            } else if (activeSet.has(cat)) {
+              ch.classList.add(activeCls);
+            } else if (prevScenes.some(s => s.categories.includes(cat))) {
+              ch.classList.add(usedCls);
+            }
+          });
+        };
+        applyTo(chipsWrap.querySelectorAll('.chip'), 'active', 'used');
+        applyTo(mChipsWrap.querySelectorAll('.m-chip'), 'active', 'used');
+      }
+
+      function updateScrubber(t, sceneIdx) {
+        const segs = scrubber.querySelectorAll('.seg');
+        segs.forEach(seg => {
+          const s = parseFloat(seg.dataset.start);
+          const e = parseFloat(seg.dataset.end);
+          const type = seg.dataset.type;
+          const fill = seg.querySelector('.seg-fill');
+          seg.classList.remove('active', 'visited');
+          if (t >= s && t < e) {
+            seg.classList.add('active');
+            const pct = Math.min(100, ((t - s) / (e - s)) * 100);
+            fill.style.width = `${pct}%`;
+          } else if (t >= e) {
+            seg.classList.add('visited');
+            fill.style.width = '100%';
+          } else {
+            fill.style.width = '0%';
+          }
+        });
+      }
+
+      // controls
+      btnPlay.addEventListener('click', () => {
+        if (video.paused) video.play().catch(() => {});
+        else video.pause();
+      });
+      btnRestart.addEventListener('click', () => {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      });
+
+      video.addEventListener('play', () => { btnPlay.textContent = 'Pause'; });
+      video.addEventListener('pause', () => { btnPlay.textContent = 'Spill'; });
+      video.addEventListener('ended', () => { btnPlay.textContent = 'Spill'; });
+      video.addEventListener('timeupdate', update);
+      video.addEventListener('loadedmetadata', () => { update(); fitStage(); });
+      video.addEventListener('seeked', update);
+
+      // loading / error feedback
+      const statusEl = document.getElementById('video-status');
+      function showStatus(text) { statusEl.textContent = text; statusEl.style.opacity = '1'; }
+      function hideStatus() { statusEl.style.opacity = '0'; }
+      video.addEventListener('waiting', () => showStatus('Laster video\u2026'));
+      video.addEventListener('stalled', () => showStatus('Venter p\u00e5 data\u2026'));
+      video.addEventListener('canplay', hideStatus);
+      video.addEventListener('playing', hideStatus);
+      video.addEventListener('error', () => {
+        const e = video.error;
+        const codes = {1:'MEDIA_ERR_ABORTED',2:'MEDIA_ERR_NETWORK',3:'MEDIA_ERR_DECODE',4:'MEDIA_ERR_SRC_NOT_SUPPORTED'};
+        showStatus('Feil: ' + (e ? (codes[e.code] || e.code) : 'ukjent'));
+      });
+      // wrap play click — show status immediately if not ready
+      btnPlay.addEventListener('click', () => {
+        if (video.readyState < 2) showStatus('Laster video\u2026');
+      });
+
+      // keyboard
+      function jumpToStep(stepNum) {
+        const sc = SCENES.find(s => s.step === stepNum);
+        if (!sc) return;
+        video.currentTime = sc.start + 0.01;
+        video.play().catch(() => {});
+      }
+      function prevStep() {
+        const t = video.currentTime;
+        const cur = SCENES.findIndex(s => t >= s.start && t < s.end);
+        const target = cur > 0 ? SCENES[cur - 1] : SCENES[0];
+        video.currentTime = target.start + 0.01;
+        video.play().catch(() => {});
+      }
+      function nextStep() {
+        const t = video.currentTime;
+        const cur = SCENES.findIndex(s => t >= s.start && t < s.end);
+        const target = cur >= 0 && cur < SCENES.length - 1 ? SCENES[cur + 1] :
+                       cur === -1 && t < SCENES[0].start ? SCENES[0] : SCENES[SCENES.length - 1];
+        video.currentTime = target.start + 0.01;
+        video.play().catch(() => {});
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+        const k = e.key;
+        if (k >= '1' && k <= '9') { e.preventDefault(); jumpToStep(parseInt(k, 10)); }
+        else if (k === '0') { e.preventDefault(); jumpToStep(10); }
+        else if (k === ' ') { e.preventDefault(); if (video.paused) video.play().catch(() => {}); else video.pause(); }
+        else if (k === 'ArrowLeft') { e.preventDefault(); prevStep(); }
+        else if (k === 'ArrowRight') { e.preventDefault(); nextStep(); }
+        else if (k === 'r' || k === 'R') { e.preventDefault(); video.currentTime = 0; video.play().catch(() => {}); }
+      });
+
+      // init
+      fitStage();
+      update();
+    </script>
+  </body>
+</html>
