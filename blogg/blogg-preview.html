@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Datavask i praksis: fra rådata til strukturert informasjon — Commit</title>
+  <title>Femten minutter fra forespørsel til klart tilbud — Commit</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
@@ -477,10 +477,10 @@
 <!-- NAV -->
 <header>
   <div class="nav-wrap">
-    <img src="commit_logo.png" alt="Commit" class="logo-img" />
+    <img src="../commit_logo.png" alt="Commit" class="logo-img" />
     <nav>
       <a href="#">Hvem er vi</a>
-      <a href="blogg.html">Blogg</a>
+      <a href="#">Blogg</a>
       <a href="#" class="nav-btn">Kontakt oss</a>
     </nav>
   </div>
@@ -493,7 +493,7 @@
     <span class="crumb-sep">›</span>
     <a href="blogg.html">Blogg</a>
     <span class="crumb-sep">›</span>
-    <span>Datavask i praksis: fra rådata til strukturert informasjon</span>
+    <span>Femten minutter fra forespørsel til klart tilbud</span>
   </div>
 </div>
 
@@ -503,107 +503,123 @@
   <!-- ARTICLE MAIN -->
   <article class="article-main">
 
-    <p class="article-kicker">Claude Code i praksis &nbsp;·&nbsp; Del 3</p>
+    <p class="article-kicker">Claude Code i praksis &nbsp;·&nbsp; Del 1</p>
 
-    <h1 class="article-title">Datavask i praksis: fra rådata til strukturert informasjon</h1>
+    <h1 class="article-title">Femten minutter fra forespørsel til klart tilbud</h1>
 
-    <p class="article-intro">Vi fikk levert en Excel-fil med 4 000 rader og tre forskjellige datoformater. Å rydde opp tok en halvtime, mesteparten av det en kaffekopp.</p>
-
-    <figure style="margin:0 0 2.5rem;border-radius:8px;overflow:hidden;border:1px solid var(--line);">
-      <img src="hero_datavask.png" alt="Terminal som viser Claude Code rydde opp i Excel-data med tre datoformater og duplikatrader" style="width:100%;display:block;" />
-      <figcaption style="font-size:0.78rem;color:var(--ink-soft);padding:0.6rem 0.85rem;background:var(--bg);border-top:1px solid var(--line);">Claude identifiserer tre datoformater, 47 duplikatrader og 12 tomme celler, og eksporterer en renset fil.</figcaption>
-    </figure>
+    <p class="article-intro">Vi fikk en forespørsel i Mercell en tirsdag. Vi ga Claude én instruksjon. Femten minutter senere var tilbudet klart for kvalitetssikring. Her er hva som skjedde.</p>
 
     <div class="article-meta">
-      <img src="photo_loc.png" alt="Loc Cao Do" style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
-      <span class="meta-name">Loc Cao Do</span>
+      <img src="../photo_oystein.jpg" alt="Øystein Kopstad" style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+      <span class="meta-name">Øystein Kopstad</span>
       <span class="meta-dot">·</span>
-      <span>5. april 2026</span>
+      <span>10. april 2026</span>
       <span class="meta-dot">·</span>
-      <span>5 min</span>
+      <span>8 min</span>
     </div>
+
+    <figure style="margin:0 0 2.5rem;border-radius:8px;overflow:hidden;border:1px solid var(--line);">
+      <img src="robot_tilbud.png" alt="Illustrasjon av AI-agent som genererer dokument automatisk" style="width:100%;display:block;" />
+      <figcaption style="font-size:0.78rem;color:var(--ink-soft);padding:0.6rem 0.85rem;background:var(--bg);border-top:1px solid var(--line);">Claude leser forespørselen, analyserer kandidater og genererer tilbudsdokumentene — ferdig på femten minutter.</figcaption>
+    </figure>
 
     <div class="prose">
 
-      <h2 id="problemet">Problemet med rådata</h2>
+      <h2 id="ikke-et-chatvindu">Claude Code er ikke et chatvindu</h2>
 
-      <p>Data fra ulike systemer er sjelden konsistent. En eksportfil fra ett system bruker ett datoformat, en annen bruker noe helt annet, og en tredje har latt brukerne fylle inn manuelt. Resultatet er en fil ingen kan bruke direkte.</p>
+      <p>De fleste AI-verktøy fungerer som et avansert søkefelt. Du stiller et spørsmål, du får et svar. Nyttig, men du sitter fremdeles som mellomledd mellom verktøyet og arbeidet ditt. Du kopierer inn, du kopierer ut, du gjør selve jobben.</p>
 
-      <p>Manuelle vaskeoperasjoner tar lang tid og er vanskelig å gjenta. Du husker ikke nøyaktig hva du gjorde sist, og neste gang du får en lignende fil begynner du på nytt.</p>
+      <p>Claude Code er et kommandolinjeverktøy som kjører lokalt på maskinen din. Det har tilgang til filsystemet, terminalen, nettleseren og systemene du kobler til via integrasjoner. I stedet for å svare på hva du bør gjøre, gjør det oppgaven.</p>
 
-      <ul>
-        <li>Data fra ulike systemer er sjelden konsistent</li>
-        <li>Manuelle vaskeoperasjoner tar lang tid og er vanskelig å gjenta</li>
-        <li>Eksempel: en fil med datoer skrevet som "01.04.2026", "2026-04-01" og "April 1, 2026" på én og samme gang</li>
-      </ul>
+      <p>Fire komponenter gjør dette mulig:</p>
 
-      <h2 id="hva-vi-ba">Hva vi ba Claude om</h2>
+      <p><strong>Tools</strong> gir Claude muligheten til å handle. Det vil si lese og skrive filer, kjøre kode, navigere nettsider og kjøre terminalkommandoer. En agent som utfører oppgaver, ikke bare beskriver dem.</p>
 
-      <p>Vi lastet filen inn i arbeidsområdet og ga Claude en enkel instruksjon:</p>
+      <p><strong>MCP</strong> (Model Context Protocol) er standarden vi bruker for å koble Claude til interne systemer. Vi har blant annet koblet det til Cinode, som er systemet vi bruker for å administrere konsulentprofiler, kompetanse og tilgjengelighet internt i Commit. Du kan tenke på det som et intranett for konsulentdata. MCP ble opprinnelig laget av Anthropic, men brukes nå av både OpenAI og Google, noe som sier en del om retningen.</p>
+
+      <p><strong>Skills</strong> er gjenbrukbare arbeidsmåter. En skill er en mappe med instruksjoner, maler og skript som Claude leser inn ved behov. Vi har bygget skills for tilbudsbrev, SSA-B-leveranser og generering av Word- og Excel-dokumenter. Arbeidsmåten kodes inn én gang, og er tilgjengelig i alle fremtidige sesjoner uten at noen må instruere Claude på nytt.</p>
+
+      <p><strong>Hooks</strong> er skript som kjøres automatisk rundt Claude. Før et verktøy brukes, etter en filendring, ved sesjonstart. Vi bruker det til logging og agentovervåking, slik at teamet alltid vet hva som foregår og kan gripe inn.</p>
+
+      <h2 id="det-vi-testet">Det vi testet</h2>
+
+      <p>Vi fikk en minikonkurranse under en dynamisk innkjøpsordning i Mercell, en av de vanligste portalene for offentlige anskaffelser i Norge. Oppdraget gjaldt en senior Java-utvikler. Vi ga Claude én instruksjon og lot skillen styre resten.</p>
 
     </div>
 
+    <!-- TERMINAL -->
     <div class="terminal">
       <div class="terminal-bar">
         <span class="dot dot-r"></span>
         <span class="dot dot-y"></span>
         <span class="dot dot-g"></span>
-        <span class="terminal-label">claude — datavask</span>
+        <span class="terminal-label">claude — Presentasjon</span>
       </div>
       <div class="terminal-body">
-        <div><span class="t-prompt">$</span> <span class="t-cmd">claude "Les kundedata.xlsx og rydd opp datoformater, fjern duplikater, og flagg rader med manglende verdier"</span></div>
-        <div><span class="t-step">  → Leser kundedata.xlsx (4 023 rader, 12 kolonner)...</span></div>
-        <div><span class="t-out">  ✓ Fil lest. Fant 4 problemer:</span></div>
-        <div><span class="t-out">    1. Tre datoformater i kolonne "opprettet_dato"</span></div>
-        <div><span class="t-out">    2. 47 duplikate rader (basert på e-post + navn)</span></div>
-        <div><span class="t-out">    3. 12 rader med manglende verdi i "telefon"</span></div>
-        <div><span class="t-out">    4. 3 rader med ugyldig e-postformat</span></div>
-        <div><span class="t-step">  → Foreslår fremgangsmåte. Bekreft for å fortsette...</span></div>
+        <div><span class="t-prompt">$</span> <span class="t-cmd">claude "Vi har fått en forespørsel i Mercell, behandle den"</span></div>
+        <div><span class="t-out">  ✓ Skill mercell-tilbud lastet inn</span></div>
+        <div><span class="t-step">  → Playwright logger inn på Mercell...</span></div>
+        <div><span class="t-out">  ✓ 18 filer lastet ned og konvertert</span></div>
+        <div><span class="t-step">  → Søker i Cinode: Java / Spring Boot / Kubernetes</span></div>
+        <div><span class="t-out">  ✓ 3 kandidater funnet</span></div>
+        <div><span class="t-step">  → 3 agenter analyserer kandidater parallelt...</span></div>
+        <div><span class="t-out">  ✓ Agenter fullført — anbefaling klar</span></div>
+        <div><span class="t-step">  → Venter på brukerbekreftelse...</span> <span class="t-comment"># AskUserQuestion</span></div>
         <div><span class="t-ok">  ✓ Bekreftet</span></div>
-        <div><span class="t-step">  → Genererer Python-skript med pandas...</span></div>
-        <div><span class="t-ok">  ✓ vask_kundedata.py opprettet og kjørt</span></div>
-        <div><span class="t-out">  ✓ kundedata_ren.xlsx og rapport.txt skrevet</span></div>
+        <div><span class="t-step">  → 4 agenter genererer dokumenter parallelt...</span></div>
+        <div><span class="t-out">  ✓ Tilbudsbrev, egenerklæring, vedlegg 1, bilag 3-B</span></div>
+        <div><span class="t-step">  → Playwright laster opp til Mercell...</span></div>
+        <div><span class="t-ok">  ✓ Tilbud levert <span class="t-comment"># ~15m</span></span></div>
       </div>
     </div>
 
     <div class="prose">
 
-      <p>Tre ting er verdt å merke seg her. Claude identifiserte fire problemer, ikke bare de tre vi ba om. Den spurte om bekreftelse på fremgangsmåte før den gikk videre. Og den genererte et skript, ikke bare et resultat.</p>
+      <p>Playwright-integrasjonen logget inn i Mercell og lastet ned 18 filer fra konkurransegrunnlaget. Claude konverterte dem og leste gjennom kravspesifikasjonen. Deretter brukte den Cinode til å søke etter konsulenter med relevant bakgrunn.</p>
 
-      <ul>
-        <li>"Les denne filen og rydd opp datoformater, fjern duplikater, og flagg rader med manglende verdier"</li>
-        <li>Claude leste filen, identifiserte fire ulike problemer og spurte om bekreftelse på fremgangsmåte</li>
-        <li>Deretter ble det generert et Python-skript med pandas</li>
-      </ul>
+      <p>Her delte Claude opp arbeidet: tre sub-agenter kjørte i parallell og vurderte tre kandidater mot kravene. Etter at de var ferdig, presenterte Claude en anbefaling og stoppet opp for å be om bekreftelse før den gikk videre.</p>
 
-      <h2 id="resultatet">Resultatet</h2>
+      <p>Det er en bevisst del av oppsettet. Claude stopper og spør før den tar beslutninger med konsekvenser. Vi satt ikke borte fra sesjonen, vi var bare ikke den som utførte arbeidet.</p>
 
-      <p>Skriptet kjørte på sekunder og produserte to filer: en ren datafil og en rapport over hva som ble endret. Rapporten var lesbar og konkret.</p>
+      <p>Etter bekreftelse startet fire agenter parallelt og genererte tilbudsbrev, egenerklæring om russisk involvering, sikkerhetskrav-vedlegg og kandidatbilag. Alle dokumenter bygget på firmamaler vi hadde lagt inn på forhånd, fylt med korrekte opplysninger fra Cinode. Claude sjekket at alle filer var generert, åpnet Mercell igjen og lastet opp. Tilbudet var levert.</p>
 
-      <ul>
-        <li>Skriptet kjørte, produserte en ren fil og en rapport over hva som ble endret</li>
-        <li>Rapporten viste: 47 duplikater fjernet, 12 rader flagget, alle datoer normalisert til ISO 8601</li>
-        <li>Skriptet kan kjøres på nytt neste gang vi får en fil fra samme kilde</li>
-      </ul>
+      <h2 id="hva-vi-lærte">Hva vi tok med oss</h2>
+
+      <p>Tidsbesparelsen er ikke det mest interessante. Det interessante er hva vi brukte de femten minuttene på i stedet.</p>
+
+      <p>Tilbudsskriving krever faglig vurdering: kjenner vi kandidaten godt nok, forstår vi hva kunden faktisk trenger, formulerer vi oss troverdig? Det er ikke noe Claude gjør for oss. Men å huske hvilken mappe egenerklæringen ligger i, hva filformatet skal være, og i hvilken rekkefølge vedleggene skal lastes opp, det er ikke faglig vurdering. Det er prosedyre.</p>
 
       <div class="pull-quote">
-        <p>Resultatet er ikke bare en ren fil. Det er et skript du kan kjøre igjen neste gang du får data fra samme kilde.</p>
+        <p>Ikke la AI ta over der fagkunnskapen din er avgjørende. La den heller løfte deg dit raskere, slik at du kan bruke ekspertisen din der den faktisk teller.</p>
       </div>
 
-      <h2 id="sparer-tid">Det som faktisk sparer tid</h2>
+      <p>En ting vi har lært etter å ha kjørt dette en stund: vær forsiktig med å la Claude skrive kode du ikke forstår. Det gir rask output, men bygger teknisk gjeld like raskt. Vi bruker Claude som forsterker. Arkitekten bestemmer, agenten bygger.</p>
 
-      <p>Det er fristende å se på vasken som selve gevinsten. Men det er skriptet som er verdien på lengre sikt. Første gang tar det en halvtime med kaffe. Neste gang tar det sekunder.</p>
+      <h2 id="komme-i-gang">Vil du prøve noe lignende?</h2>
 
-      <ul>
-        <li>Ikke selve vasken, det er skriptet du sitter igjen med</li>
-        <li>Neste gang tar det sekunder, ikke en halvtime</li>
-        <li>Og du trenger ikke huske alle pandas-metodene selv</li>
-      </ul>
+      <p>Du trenger ikke starte med en full integrasjonsoppsett. Her er hva vi faktisk anbefaler å begynne med:</p>
 
-      <p>Vi har nå en mappe med vasker for de vanligste datakildene vi jobber med. Når neste eksportfil kommer, kjører vi riktig skript og sjekker rapporten. Det er en annen arbeidsform enn å sitte med find-and-replace i Excel.</p>
+      <div class="step-list">
+        <div class="step-item">
+          <span class="step-num">1</span>
+          <p class="step-text"><strong>Koble Claude til der du allerede jobber.</strong> Repo, dokumenter, interne systemer. Unngå copy-paste-chatting. Det er en dårlig arbeidsform uansett om du bruker AI eller ikke.</p>
+        </div>
+        <div class="step-item">
+          <span class="step-num">2</span>
+          <p class="step-text"><strong>Bygg én skill for en oppgave du gjør ofte.</strong> Tilbudsbrev, møtereferat, et fast rapportformat. Én ting, gjort skikkelig.</p>
+        </div>
+        <div class="step-item">
+          <span class="step-num">3</span>
+          <p class="step-text"><strong>Sett opp hooks for synlighet.</strong> Du bør alltid kunne se hva Claude gjør. Enkle pre- og post-tool-hooks gir deg en logg og mulighet til å gripe inn.</p>
+        </div>
+        <div class="step-item">
+          <span class="step-num">4</span>
+          <p class="step-text"><strong>Hold kontroll på faglige beslutninger.</strong> La Claude håndtere prosedyre. Behold kontrollen på vurderingen.</p>
+        </div>
+      </div>
 
       <div class="cta-box">
-        <p>Jobber du med data som trenger opprydding? Vi hjelper gjerne med å sette opp et godt vaskeløp tilpasset dine datakilder.</p>
+        <p>Vi hjelper gjerne med oppsett tilpasset din kontekst, enten det gjelder MCP-integrasjoner, skills eller agentarkitektur.</p>
         <p>Ta kontakt: <a href="mailto:kopstad@commit.no">kopstad@commit.no</a></p>
       </div>
 
@@ -611,10 +627,10 @@
 
     <div style="margin-top:2.5rem;padding:1.25rem 1.5rem;border:1px solid var(--line);border-radius:8px;background:var(--bg);">
       <div class="author-card-inner" style="display:flex;gap:1rem;align-items:flex-start;">
-        <img src="photo_loc.png" alt="Loc Cao Do" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+        <img src="../photo_oystein.jpg" alt="Øystein Kopstad" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
         <div class="author-info">
-          <h4 style="font-size:0.95rem;font-weight:600;color:var(--ink);margin-bottom:0.35rem;">Loc Cao Do</h4>
-          <p style="font-size:0.83rem;line-height:1.6;color:var(--ink-soft);margin:0;">Seniorkonsulent i Commit AS. Spesialist innen datavarehus, ETL og BI med Azure Databricks, PySpark og Power BI.</p>
+          <h4 style="font-size:0.95rem;font-weight:600;color:var(--ink);margin-bottom:0.35rem;">Øystein Kopstad</h4>
+          <p style="font-size:0.83rem;line-height:1.6;color:var(--ink-soft);margin:0;">Konsulent i Commit AS. Jobber med AI-agenter, MCP-integrasjoner og automatisering av forretningsprosesser.</p>
         </div>
       </div>
     </div>
@@ -627,7 +643,7 @@
     <div class="sidebar-section">
       <div class="sidebar-label">Serie — Claude Code i praksis</div>
       <ol class="series-list">
-        <li class="series-item">
+        <li class="series-item current">
           <a href="blogg-preview.html">
             <span class="series-del">Del 1</span>
             Femten minutter fra forespørsel til klart tilbud
@@ -639,7 +655,7 @@
             Bugfix fra A til Å med Claude Code og Jira
           </a>
         </li>
-        <li class="series-item current">
+        <li class="series-item">
           <a href="blogg-datavask.html">
             <span class="series-del">Del 3</span>
             Datavask i praksis: fra rådata til strukturert informasjon
@@ -651,10 +667,10 @@
     <div class="sidebar-section">
       <div class="sidebar-label">Innhold</div>
       <ul class="toc">
-        <li><a href="#problemet">Problemet med rådata</a></li>
-        <li><a href="#hva-vi-ba">Hva vi ba Claude om</a></li>
-        <li><a href="#resultatet">Resultatet</a></li>
-        <li><a href="#sparer-tid">Det som faktisk sparer tid</a></li>
+        <li><a href="#ikke-et-chatvindu">Claude Code er ikke et chatvindu</a></li>
+        <li><a href="#det-vi-testet">Det vi testet</a></li>
+        <li><a href="#hva-vi-lærte">Hva vi tok med oss</a></li>
+        <li><a href="#komme-i-gang">Vil du prøve noe lignende?</a></li>
       </ul>
     </div>
 
@@ -662,19 +678,19 @@
       <div class="sidebar-label">Temaer</div>
       <div class="tag-list">
         <a href="#" class="tag">Claude Code</a>
-        <a href="#" class="tag">Data</a>
-        <a href="#" class="tag">Python</a>
-        <a href="#" class="tag">pandas</a>
-        <a href="#" class="tag">Datavask</a>
+        <a href="#" class="tag">AI-agenter</a>
+        <a href="#" class="tag">MCP</a>
         <a href="#" class="tag">Automatisering</a>
+        <a href="#" class="tag">Mercell</a>
+        <a href="#" class="tag">Tilbud</a>
       </div>
     </div>
 
     <div class="sidebar-section">
       <div class="sidebar-label">Om forfatteren</div>
       <div class="sidebar-author">
-        <p><strong>Loc Cao Do</strong><br/>Seniorkonsulent, Commit AS</p>
-        <p>Spesialist innen datavarehus, ETL og BI. Jobber med Azure Databricks, PySpark og Power BI.</p>
+        <p><strong>Øystein Kopstad</strong><br/>Konsulent, Commit AS</p>
+        <p>Jobber med AI-agenter, MCP-integrasjoner og automatisering av forretningsprosesser.</p>
       </div>
     </div>
 
@@ -687,15 +703,15 @@
   <div class="related-inner">
     <h3>Mer fra bloggen</h3>
     <div class="related-grid">
-      <a href="blogg-preview.html" class="related-card">
-        <div class="rc-kicker">Claude Code i praksis</div>
-        <h4>Femten minutter fra forespørsel til klart tilbud</h4>
-        <span>10. april 2026</span>
-      </a>
       <a href="blogg-bugfix.html" class="related-card">
         <div class="rc-kicker">Utvikling</div>
         <h4>Bugfix fra A til Å med Claude Code og Jira</h4>
         <span>8. april 2026</span>
+      </a>
+      <a href="blogg-datavask.html" class="related-card">
+        <div class="rc-kicker">Data</div>
+        <h4>Datavask i praksis: fra rådata til strukturert informasjon</h4>
+        <span>5. april 2026</span>
       </a>
       <a href="blogg-hooks.html" class="related-card">
         <div class="rc-kicker">Sikkerhet</div>

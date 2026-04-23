@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Femten minutter fra forespørsel til klart tilbud — Commit</title>
+  <title>PII-skanning og audit-logging med Claude Hooks — Commit</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
@@ -200,6 +200,7 @@
     .t-out { color: #94A3B8; }
     .t-ok { color: #4ADE80; }
     .t-step { color: #7DD3FC; }
+    .t-warn { color: #FBBF24; }
 
     /* ── PROSE ── */
     .prose h2 {
@@ -316,38 +317,6 @@
       text-decoration: none;
     }
     .cta-box a:hover { text-decoration: underline; }
-
-    /* ── SERIE ── */
-    .series-list { list-style: none; }
-    .series-item {
-      padding: 0.5rem 0.75rem 0.5rem 0.9rem;
-      border-left: 2px solid var(--line);
-      margin-bottom: 0.35rem;
-      border-radius: 0 4px 4px 0;
-    }
-    .series-item.current {
-      border-left-color: var(--blue);
-      background: var(--blue-light);
-    }
-    .series-item a {
-      font-size: 0.81rem;
-      line-height: 1.4;
-      color: var(--ink-soft);
-      text-decoration: none;
-      display: block;
-    }
-    .series-item a:hover { color: var(--blue); }
-    .series-item.current a { color: var(--blue); font-weight: 600; }
-    .series-del {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--blue);
-      display: block;
-      margin-bottom: 0.15rem;
-      opacity: 0.75;
-    }
 
     /* ── SIDEBAR ── */
     .sidebar { position: sticky; top: 80px; }
@@ -477,10 +446,10 @@
 <!-- NAV -->
 <header>
   <div class="nav-wrap">
-    <img src="commit_logo.png" alt="Commit" class="logo-img" />
+    <img src="../commit_logo.png" alt="Commit" class="logo-img" />
     <nav>
       <a href="#">Hvem er vi</a>
-      <a href="#">Blogg</a>
+      <a href="blogg.html">Blogg</a>
       <a href="#" class="nav-btn">Kontakt oss</a>
     </nav>
   </div>
@@ -493,7 +462,7 @@
     <span class="crumb-sep">›</span>
     <a href="blogg.html">Blogg</a>
     <span class="crumb-sep">›</span>
-    <span>Femten minutter fra forespørsel til klart tilbud</span>
+    <span>PII-skanning og audit-logging med Claude Hooks</span>
   </div>
 </div>
 
@@ -503,123 +472,120 @@
   <!-- ARTICLE MAIN -->
   <article class="article-main">
 
-    <p class="article-kicker">Claude Code i praksis &nbsp;·&nbsp; Del 1</p>
+    <p class="article-kicker">Sikkerhet</p>
 
-    <h1 class="article-title">Femten minutter fra forespørsel til klart tilbud</h1>
+    <h1 class="article-title">PII-skanning og audit-logging med Claude Hooks</h1>
 
-    <p class="article-intro">Vi fikk en forespørsel i Mercell en tirsdag. Vi ga Claude én instruksjon. Femten minutter senere var tilbudet klart for kvalitetssikring. Her er hva som skjedde.</p>
-
-    <div class="article-meta">
-      <img src="photo_oystein.jpg" alt="Øystein Kopstad" style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
-      <span class="meta-name">Øystein Kopstad</span>
-      <span class="meta-dot">·</span>
-      <span>10. april 2026</span>
-      <span class="meta-dot">·</span>
-      <span>8 min</span>
-    </div>
+    <p class="article-intro">Hooks er den minst omtalte delen av Claude Code. De er også den delen som gjør det mulig å bruke Claude trygt i produksjonsnære miljøer.</p>
 
     <figure style="margin:0 0 2.5rem;border-radius:8px;overflow:hidden;border:1px solid var(--line);">
-      <img src="robot_tilbud.png" alt="Illustrasjon av AI-agent som genererer dokument automatisk" style="width:100%;display:block;" />
-      <figcaption style="font-size:0.78rem;color:var(--ink-soft);padding:0.6rem 0.85rem;background:var(--bg);border-top:1px solid var(--line);">Claude leser forespørselen, analyserer kandidater og genererer tilbudsdokumentene — ferdig på femten minutter.</figcaption>
+      <img src="hero_hooks.png" alt="Terminal som viser hooks-konfigurasjon med PII-skanning og audit-logging i Claude Code" style="width:100%;display:block;" />
+      <figcaption style="font-size:0.78rem;color:var(--ink-soft);padding:0.6rem 0.85rem;background:var(--bg);border-top:1px solid var(--line);">Hooks-konfigurasjon i settings.json: PII-skanning blokkerer sensitiv data, audit-logging fanger alle filoperasjoner.</figcaption>
     </figure>
+
+    <div class="article-meta">
+      <img src="../photo_oystein.jpg" alt="Øystein Kopstad" style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+      <span class="meta-name">Øystein Kopstad</span>
+      <span class="meta-dot">·</span>
+      <span>1. april 2026</span>
+      <span class="meta-dot">·</span>
+      <span>7 min</span>
+    </div>
 
     <div class="prose">
 
-      <h2 id="ikke-et-chatvindu">Claude Code er ikke et chatvindu</h2>
+      <h2 id="hva-er-hooks">Hva er hooks, egentlig?</h2>
 
-      <p>De fleste AI-verktøy fungerer som et avansert søkefelt. Du stiller et spørsmål, du får et svar. Nyttig, men du sitter fremdeles som mellomledd mellom verktøyet og arbeidet ditt. Du kopierer inn, du kopierer ut, du gjør selve jobben.</p>
+      <p>Hooks er skript du kobler til hendelser i Claude Code-sesjonen. Det vil si at når Claude er i ferd med å gjøre noe, kjøres et skript du har definert på forhånd. Skriptet kjøres av maskinen, ikke av Claude. Claude vet ikke hva skriptet gjør, og kan ikke endre det.</p>
 
-      <p>Claude Code er et kommandolinjeverktøy som kjører lokalt på maskinen din. Det har tilgang til filsystemet, terminalen, nettleseren og systemene du kobler til via integrasjoner. I stedet for å svare på hva du bør gjøre, gjør det oppgaven.</p>
+      <p>Typiske hendelser:</p>
 
-      <p>Fire komponenter gjør dette mulig:</p>
+      <ul>
+        <li>Hooks er skript du kobler til hendelser i Claude Code-sesjonen</li>
+        <li>Typiske hendelser: PreToolUse (før Claude bruker et verktøy), PostToolUse (etter), SessionStart, SessionEnd</li>
+        <li>Skriptet kjøres av maskinen, ikke av Claude, og Claude vet ikke hva skriptet gjør</li>
+      </ul>
 
-      <p><strong>Tools</strong> gir Claude muligheten til å handle. Det vil si lese og skrive filer, kjøre kode, navigere nettsider og kjøre terminalkommandoer. En agent som utfører oppgaver, ikke bare beskriver dem.</p>
+      <p>Det gjør hooks til et godt sted å legge kontroller som skal gjelde uavhengig av hva Claude gjør. Ingen prompt kan instruere Claude til å omgå en hook, fordi Claude ikke er involvert i kjøringen.</p>
 
-      <p><strong>MCP</strong> (Model Context Protocol) er standarden vi bruker for å koble Claude til interne systemer. Vi har blant annet koblet det til Cinode, som er systemet vi bruker for å administrere konsulentprofiler, kompetanse og tilgjengelighet internt i Commit. Du kan tenke på det som et intranett for konsulentdata. MCP ble opprinnelig laget av Anthropic, men brukes nå av både OpenAI og Google, noe som sier en del om retningen.</p>
+      <h2 id="pii-skanning">PII-skanning i praksis</h2>
 
-      <p><strong>Skills</strong> er gjenbrukbare arbeidsmåter. En skill er en mappe med instruksjoner, maler og skript som Claude leser inn ved behov. Vi har bygget skills for tilbudsbrev, SSA-B-leveranser og generering av Word- og Excel-dokumenter. Arbeidsmåten kodes inn én gang, og er tilgjengelig i alle fremtidige sesjoner uten at noen må instruere Claude på nytt.</p>
-
-      <p><strong>Hooks</strong> er skript som kjøres automatisk rundt Claude. Før et verktøy brukes, etter en filendring, ved sesjonstart. Vi bruker det til logging og agentovervåking, slik at teamet alltid vet hva som foregår og kan gripe inn.</p>
-
-      <h2 id="det-vi-testet">Det vi testet</h2>
-
-      <p>Vi fikk en minikonkurranse under en dynamisk innkjøpsordning i Mercell, en av de vanligste portalene for offentlige anskaffelser i Norge. Oppdraget gjaldt en senior Java-utvikler. Vi ga Claude én instruksjon og lot skillen styre resten.</p>
+      <p>Vi har satt opp en PreToolUse-hook som kjøres rett før Claude sender data til et eksternt verktøy. Skriptet scanner teksten og ser etter mønstre som indikerer personopplysninger.</p>
 
     </div>
 
-    <!-- TERMINAL -->
     <div class="terminal">
       <div class="terminal-bar">
         <span class="dot dot-r"></span>
         <span class="dot dot-y"></span>
         <span class="dot dot-g"></span>
-        <span class="terminal-label">claude — Presentasjon</span>
+        <span class="terminal-label">pii_hook.py — PreToolUse</span>
       </div>
       <div class="terminal-body">
-        <div><span class="t-prompt">$</span> <span class="t-cmd">claude "Vi har fått en forespørsel i Mercell, behandle den"</span></div>
-        <div><span class="t-out">  ✓ Skill mercell-tilbud lastet inn</span></div>
-        <div><span class="t-step">  → Playwright logger inn på Mercell...</span></div>
-        <div><span class="t-out">  ✓ 18 filer lastet ned og konvertert</span></div>
-        <div><span class="t-step">  → Søker i Cinode: Java / Spring Boot / Kubernetes</span></div>
-        <div><span class="t-out">  ✓ 3 kandidater funnet</span></div>
-        <div><span class="t-step">  → 3 agenter analyserer kandidater parallelt...</span></div>
-        <div><span class="t-out">  ✓ Agenter fullført — anbefaling klar</span></div>
-        <div><span class="t-step">  → Venter på brukerbekreftelse...</span> <span class="t-comment"># AskUserQuestion</span></div>
-        <div><span class="t-ok">  ✓ Bekreftet</span></div>
-        <div><span class="t-step">  → 4 agenter genererer dokumenter parallelt...</span></div>
-        <div><span class="t-out">  ✓ Tilbudsbrev, egenerklæring, vedlegg 1, bilag 3-B</span></div>
-        <div><span class="t-step">  → Playwright laster opp til Mercell...</span></div>
-        <div><span class="t-ok">  ✓ Tilbud levert <span class="t-comment"># ~15m</span></span></div>
+        <div><span class="t-step">  → PreToolUse: web_search</span></div>
+        <div><span class="t-out">  ✓ Scanner innhold for PII...</span></div>
+        <div><span class="t-warn">  ADVARSEL: Mulig fødselsnummer funnet: "120476 *****"</span></div>
+        <div><span class="t-warn">  Verktøy blokkert. Gjennomgå forespørselen før du fortsetter.</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-step">  → PreToolUse: write_file</span></div>
+        <div><span class="t-out">  ✓ Ingen PII funnet</span></div>
+        <div><span class="t-ok">  ✓ Verktøy tillatt</span></div>
       </div>
     </div>
 
     <div class="prose">
 
-      <p>Playwright-integrasjonen logget inn i Mercell og lastet ned 18 filer fra konkurransegrunnlaget. Claude konverterte dem og leste gjennom kravspesifikasjonen. Deretter brukte den Cinode til å søke etter konsulenter med relevant bakgrunn.</p>
+      <p>Skriptet er 40 linjer Python og tar under 5 millisekunder å kjøre. Det er raskt nok til at det ikke merkes i normal bruk, men effektivt nok til å stoppe utilsiktet deling av personopplysninger.</p>
 
-      <p>Her delte Claude opp arbeidet: tre sub-agenter kjørte i parallell og vurderte tre kandidater mot kravene. Etter at de var ferdig, presenterte Claude en anbefaling og stoppet opp for å be om bekreftelse før den gikk videre.</p>
+      <ul>
+        <li>Vi har en pre-tool hook som scanner tekst Claude er i ferd med å sende til et eksternt verktøy</li>
+        <li>Ser etter mønstre som norske fødselsnumre, e-postadresser og telefonnumre</li>
+        <li>Dersom noe matches: Claude stoppes og du får en advarsel</li>
+        <li>Skriptet er 40 linjer Python og tar under 5ms å kjøre</li>
+      </ul>
 
-      <p>Det er en bevisst del av oppsettet. Claude stopper og spør før den tar beslutninger med konsekvenser. Vi satt ikke borte fra sesjonen, vi var bare ikke den som utførte arbeidet.</p>
+      <h2 id="audit-logging">Audit-logging</h2>
 
-      <p>Etter bekreftelse startet fire agenter parallelt og genererte tilbudsbrev, egenerklæring om russisk involvering, sikkerhetskrav-vedlegg og kandidatbilag. Alle dokumenter bygget på firmamaler vi hadde lagt inn på forhånd, fylt med korrekte opplysninger fra Cinode. Claude sjekket at alle filer var generert, åpnet Mercell igjen og lastet opp. Tilbudet var levert.</p>
+      <p>En PostToolUse-hook logger alle verktøykall etter at de er utført. Hvert kall skrives til en lokal JSON-fil med tidspunkt, verktøynavn og parametere.</p>
 
-      <h2 id="hva-vi-lærte">Hva vi tok med oss</h2>
+      <ul>
+        <li>En post-tool hook logger alle verktøykall til en lokal JSON-fil: hvilket verktøy, hvilke parametere, tidspunkt</li>
+        <li>Gir et søkbart spor av hva Claude gjorde i løpet av en sesjon</li>
+        <li>Nyttig når noe går galt og du vil forstå rekkefølgen av hendelser</li>
+      </ul>
 
-      <p>Tidsbesparelsen er ikke det mest interessante. Det interessante er hva vi brukte de femten minuttene på i stedet.</p>
-
-      <p>Tilbudsskriving krever faglig vurdering: kjenner vi kandidaten godt nok, forstår vi hva kunden faktisk trenger, formulerer vi oss troverdig? Det er ikke noe Claude gjør for oss. Men å huske hvilken mappe egenerklæringen ligger i, hva filformatet skal være, og i hvilken rekkefølge vedleggene skal lastes opp, det er ikke faglig vurdering. Det er prosedyre.</p>
+      <p>I praksis betyr det at du alltid kan gå tilbake og se hva som skjedde. Hvis et skript overskriv en fil du ikke ville ha overskrevet, finner du kallet i loggen, ser nøyaktig hva Claude fikk som input og hvilket kall som ble gjort.</p>
 
       <div class="pull-quote">
-        <p>Ikke la AI ta over der fagkunnskapen din er avgjørende. La den heller løfte deg dit raskere, slik at du kan bruke ekspertisen din der den faktisk teller.</p>
+        <p>Logging gir deg ikke mindre å gjøre i øyeblikket. Men det gjør det mye enklere å forstå hva som skjedde etterpå.</p>
       </div>
 
-      <p>En ting vi har lært etter å ha kjørt dette en stund: vær forsiktig med å la Claude skrive kode du ikke forstår. Det gir rask output, men bygger teknisk gjeld like raskt. Vi bruker Claude som forsterker. Arkitekten bestemmer, agenten bygger.</p>
+      <h2 id="agentovervaking">Agentovervaking</h2>
 
-      <h2 id="komme-i-gang">Vil du prøve noe lignende?</h2>
+      <p>Når Claude kjører sub-agenter i parallell kan det være vanskelig å vite hva som foregår. Vi bruker SessionStart- og SessionEnd-hooks til å oppdatere et enkelt dashbord som viser hvilke agenter som kjører og hvor lenge de har kjørt.</p>
 
-      <p>Du trenger ikke starte med en full integrasjonsoppsett. Her er hva vi faktisk anbefaler å begynne med:</p>
+      <ul>
+        <li>Vi bruker hooks til å oppdatere et lite dashbord når sub-agenter starter og stopper</li>
+        <li>Det gjør det lett å se om noe har hengt seg opp eller tatt unormalt lang tid</li>
+        <li>Kombinert med logging vet du alltid hva som skjer</li>
+      </ul>
 
-      <div class="step-list">
-        <div class="step-item">
-          <span class="step-num">1</span>
-          <p class="step-text"><strong>Koble Claude til der du allerede jobber.</strong> Repo, dokumenter, interne systemer. Unngå copy-paste-chatting. Det er en dårlig arbeidsform uansett om du bruker AI eller ikke.</p>
-        </div>
-        <div class="step-item">
-          <span class="step-num">2</span>
-          <p class="step-text"><strong>Bygg én skill for en oppgave du gjør ofte.</strong> Tilbudsbrev, møtereferat, et fast rapportformat. Én ting, gjort skikkelig.</p>
-        </div>
-        <div class="step-item">
-          <span class="step-num">3</span>
-          <p class="step-text"><strong>Sett opp hooks for synlighet.</strong> Du bør alltid kunne se hva Claude gjør. Enkle pre- og post-tool-hooks gir deg en logg og mulighet til å gripe inn.</p>
-        </div>
-        <div class="step-item">
-          <span class="step-num">4</span>
-          <p class="step-text"><strong>Hold kontroll på faglige beslutninger.</strong> La Claude håndtere prosedyre. Behold kontrollen på vurderingen.</p>
-        </div>
-      </div>
+      <p>Det er ikke et avansert overvakningssystem. Det er et enkelt HTML-dashbord som viser en liste med aktive sesjoner og siste kjente status. Nok til at du legger merke til om noe ser rart ut.</p>
+
+      <h2 id="hva-hooks-ikke-er">Hva hooks ikke er</h2>
+
+      <p>Det er greit å si det tydelig: hooks løser ikke alle sikkerhetsspørsmål rundt AI-agenter. De er ett lag i en bredere tilnærming.</p>
+
+      <ul>
+        <li>De er ikke en erstatning for tilgangsstyring eller nettverksisolasjon</li>
+        <li>De er heller ikke feilfrie, et krasj i hook-skriptet kan blokkere Claude</li>
+        <li>Men de er et godt første lag i forsvar i dybden for AI-agenter</li>
+      </ul>
+
+      <p>Kombinert med god tilgangsstyring og klare grenser for hva Claude kan gjøre i ditt miljø, gir hooks deg synlighet og kontroll uten å bremse arbeidsflyt merkbart.</p>
 
       <div class="cta-box">
-        <p>Vi hjelper gjerne med oppsett tilpasset din kontekst, enten det gjelder MCP-integrasjoner, skills eller agentarkitektur.</p>
+        <p>Vi deler gjerne hook-skriptene våre som utgangspunkt. PII-skanneren og audit-loggeren er enkle å tilpasse til din kontekst.</p>
         <p>Ta kontakt: <a href="mailto:kopstad@commit.no">kopstad@commit.no</a></p>
       </div>
 
@@ -627,7 +593,7 @@
 
     <div style="margin-top:2.5rem;padding:1.25rem 1.5rem;border:1px solid var(--line);border-radius:8px;background:var(--bg);">
       <div class="author-card-inner" style="display:flex;gap:1rem;align-items:flex-start;">
-        <img src="photo_oystein.jpg" alt="Øystein Kopstad" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+        <img src="../photo_oystein.jpg" alt="Øystein Kopstad" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
         <div class="author-info">
           <h4 style="font-size:0.95rem;font-weight:600;color:var(--ink);margin-bottom:0.35rem;">Øystein Kopstad</h4>
           <p style="font-size:0.83rem;line-height:1.6;color:var(--ink-soft);margin:0;">Konsulent i Commit AS. Jobber med AI-agenter, MCP-integrasjoner og automatisering av forretningsprosesser.</p>
@@ -641,36 +607,13 @@
   <aside class="sidebar">
 
     <div class="sidebar-section">
-      <div class="sidebar-label">Serie — Claude Code i praksis</div>
-      <ol class="series-list">
-        <li class="series-item current">
-          <a href="blogg-preview.html">
-            <span class="series-del">Del 1</span>
-            Femten minutter fra forespørsel til klart tilbud
-          </a>
-        </li>
-        <li class="series-item">
-          <a href="blogg-bugfix.html">
-            <span class="series-del">Del 2</span>
-            Bugfix fra A til Å med Claude Code og Jira
-          </a>
-        </li>
-        <li class="series-item">
-          <a href="blogg-datavask.html">
-            <span class="series-del">Del 3</span>
-            Datavask i praksis: fra rådata til strukturert informasjon
-          </a>
-        </li>
-      </ol>
-    </div>
-
-    <div class="sidebar-section">
       <div class="sidebar-label">Innhold</div>
       <ul class="toc">
-        <li><a href="#ikke-et-chatvindu">Claude Code er ikke et chatvindu</a></li>
-        <li><a href="#det-vi-testet">Det vi testet</a></li>
-        <li><a href="#hva-vi-lærte">Hva vi tok med oss</a></li>
-        <li><a href="#komme-i-gang">Vil du prøve noe lignende?</a></li>
+        <li><a href="#hva-er-hooks">Hva er hooks, egentlig?</a></li>
+        <li><a href="#pii-skanning">PII-skanning i praksis</a></li>
+        <li><a href="#audit-logging">Audit-logging</a></li>
+        <li><a href="#agentovervaking">Agentovervaking</a></li>
+        <li><a href="#hva-hooks-ikke-er">Hva hooks ikke er</a></li>
       </ul>
     </div>
 
@@ -678,11 +621,11 @@
       <div class="sidebar-label">Temaer</div>
       <div class="tag-list">
         <a href="#" class="tag">Claude Code</a>
+        <a href="#" class="tag">Hooks</a>
+        <a href="#" class="tag">Sikkerhet</a>
+        <a href="#" class="tag">PII</a>
+        <a href="#" class="tag">Logging</a>
         <a href="#" class="tag">AI-agenter</a>
-        <a href="#" class="tag">MCP</a>
-        <a href="#" class="tag">Automatisering</a>
-        <a href="#" class="tag">Mercell</a>
-        <a href="#" class="tag">Tilbud</a>
       </div>
     </div>
 
@@ -703,6 +646,11 @@
   <div class="related-inner">
     <h3>Mer fra bloggen</h3>
     <div class="related-grid">
+      <a href="blogg-preview.html" class="related-card">
+        <div class="rc-kicker">Claude Code i praksis</div>
+        <h4>Femten minutter fra forespørsel til klart tilbud</h4>
+        <span>10. april 2026</span>
+      </a>
       <a href="blogg-bugfix.html" class="related-card">
         <div class="rc-kicker">Utvikling</div>
         <h4>Bugfix fra A til Å med Claude Code og Jira</h4>
@@ -712,11 +660,6 @@
         <div class="rc-kicker">Data</div>
         <h4>Datavask i praksis: fra rådata til strukturert informasjon</h4>
         <span>5. april 2026</span>
-      </a>
-      <a href="blogg-hooks.html" class="related-card">
-        <div class="rc-kicker">Sikkerhet</div>
-        <h4>PII-skanning og audit-logging med Claude Hooks</h4>
-        <span>1. april 2026</span>
       </a>
     </div>
   </div>

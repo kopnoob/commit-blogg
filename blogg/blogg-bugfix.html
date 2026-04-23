@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PII-skanning og audit-logging med Claude Hooks — Commit</title>
+  <title>Bugfix fra A til Å med Claude Code og Jira — Commit</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
@@ -200,7 +200,6 @@
     .t-out { color: #94A3B8; }
     .t-ok { color: #4ADE80; }
     .t-step { color: #7DD3FC; }
-    .t-warn { color: #FBBF24; }
 
     /* ── PROSE ── */
     .prose h2 {
@@ -317,6 +316,38 @@
       text-decoration: none;
     }
     .cta-box a:hover { text-decoration: underline; }
+
+    /* ── SERIE ── */
+    .series-list { list-style: none; }
+    .series-item {
+      padding: 0.5rem 0.75rem 0.5rem 0.9rem;
+      border-left: 2px solid var(--line);
+      margin-bottom: 0.35rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .series-item.current {
+      border-left-color: var(--blue);
+      background: var(--blue-light);
+    }
+    .series-item a {
+      font-size: 0.81rem;
+      line-height: 1.4;
+      color: var(--ink-soft);
+      text-decoration: none;
+      display: block;
+    }
+    .series-item a:hover { color: var(--blue); }
+    .series-item.current a { color: var(--blue); font-weight: 600; }
+    .series-del {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--blue);
+      display: block;
+      margin-bottom: 0.15rem;
+      opacity: 0.75;
+    }
 
     /* ── SIDEBAR ── */
     .sidebar { position: sticky; top: 80px; }
@@ -446,7 +477,7 @@
 <!-- NAV -->
 <header>
   <div class="nav-wrap">
-    <img src="commit_logo.png" alt="Commit" class="logo-img" />
+    <img src="../commit_logo.png" alt="Commit" class="logo-img" />
     <nav>
       <a href="#">Hvem er vi</a>
       <a href="blogg.html">Blogg</a>
@@ -462,7 +493,7 @@
     <span class="crumb-sep">›</span>
     <a href="blogg.html">Blogg</a>
     <span class="crumb-sep">›</span>
-    <span>PII-skanning og audit-logging med Claude Hooks</span>
+    <span>Bugfix fra A til Å med Claude Code og Jira</span>
   </div>
 </div>
 
@@ -472,46 +503,45 @@
   <!-- ARTICLE MAIN -->
   <article class="article-main">
 
-    <p class="article-kicker">Sikkerhet</p>
+    <p class="article-kicker">Claude Code i praksis &nbsp;·&nbsp; Del 2</p>
 
-    <h1 class="article-title">PII-skanning og audit-logging med Claude Hooks</h1>
+    <h1 class="article-title">Bugfix fra A til Å med Claude Code og Jira</h1>
 
-    <p class="article-intro">Hooks er den minst omtalte delen av Claude Code. De er også den delen som gjør det mulig å bruke Claude trygt i produksjonsnære miljøer.</p>
-
-    <figure style="margin:0 0 2.5rem;border-radius:8px;overflow:hidden;border:1px solid var(--line);">
-      <img src="hero_hooks.png" alt="Terminal som viser hooks-konfigurasjon med PII-skanning og audit-logging i Claude Code" style="width:100%;display:block;" />
-      <figcaption style="font-size:0.78rem;color:var(--ink-soft);padding:0.6rem 0.85rem;background:var(--bg);border-top:1px solid var(--line);">Hooks-konfigurasjon i settings.json: PII-skanning blokkerer sensitiv data, audit-logging fanger alle filoperasjoner.</figcaption>
-    </figure>
+    <p class="article-intro">En bug kom inn som Jira-issue en mandag morgen. Innen lunsj var den fikset, testet og issue-en lukket, uten at utvikleren måtte klikke seg rundt i tre ulike verktøy.</p>
 
     <div class="article-meta">
-      <img src="photo_oystein.jpg" alt="Øystein Kopstad" style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
-      <span class="meta-name">Øystein Kopstad</span>
+      <img src="../photo_tomas.jpg" alt="Tomas Johansen" style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+      <span class="meta-name">Tomas Johansen</span>
       <span class="meta-dot">·</span>
-      <span>1. april 2026</span>
+      <span>8. april 2026</span>
       <span class="meta-dot">·</span>
-      <span>7 min</span>
+      <span>6 min</span>
     </div>
+
+    <figure style="margin:0 0 2.5rem;border-radius:8px;overflow:hidden;border:1px solid var(--line);">
+      <img src="hero_bugfix.png" alt="Terminal som viser Claude Code analysere og fikse en bug fra Jira-issue til ferdig PR" style="width:100%;display:block;" />
+      <figcaption style="font-size:0.78rem;color:var(--ink-soft);padding:0.6rem 0.85rem;background:var(--bg);border-top:1px solid var(--line);">Claude leser issue fra Jira, lokaliserer rotårsaken i koden, skriver en test og oppretter PR. Alt i én operasjon.</figcaption>
+    </figure>
 
     <div class="prose">
 
-      <h2 id="hva-er-hooks">Hva er hooks, egentlig?</h2>
+      <h2 id="kontekstbytte">Fra issue til fix uten kontekstbytte</h2>
 
-      <p>Hooks er skript du kobler til hendelser i Claude Code-sesjonen. Det vil si at når Claude er i ferd med å gjøre noe, kjøres et skript du har definert på forhånd. Skriptet kjøres av maskinen, ikke av Claude. Claude vet ikke hva skriptet gjør, og kan ikke endre det.</p>
+      <p>En vanlig arbeidsdag innebærer mange verktøy: Jira for oppgaver, editor for kode, terminal for kjøring og testing. Hver gang du bytter mellom dem mister du litt momentum. Du leser en issue, åpner editoren, prøver å huske hva du nettopp leste, og begynner å lete i koden.</p>
 
-      <p>Typiske hendelser:</p>
+      <p>Med Claude koblet til Jira via MCP forsvinner mye av det. Du beskriver problemet én gang, og Claude tar seg av resten av flyten.</p>
 
       <ul>
-        <li>Hooks er skript du kobler til hendelser i Claude Code-sesjonen</li>
-        <li>Typiske hendelser: PreToolUse (før Claude bruker et verktøy), PostToolUse (etter), SessionStart, SessionEnd</li>
-        <li>Skriptet kjøres av maskinen, ikke av Claude, og Claude vet ikke hva skriptet gjør</li>
+        <li>Å bytte mellom Jira, editor og terminal er ikke bare tidkrevende, det bryter flyten</li>
+        <li>Med Claude koblet til Jira kan du beskrive problemet én gang</li>
+        <li>Claude leser issue-en, navigerer i koden og foreslår en fix</li>
       </ul>
 
-      <p>Det gjør hooks til et godt sted å legge kontroller som skal gjelde uavhengig av hva Claude gjør. Ingen prompt kan instruere Claude til å omgå en hook, fordi Claude ikke er involvert i kjøringen.</p>
+      <h2 id="hva-claude-gjor">Hva Claude faktisk gjør</h2>
 
-      <h2 id="pii-skanning">PII-skanning i praksis</h2>
+      <p>Når du ber Claude se på en bug-issue, kobler den seg til Jira via MCP og leser beskrivelsen og alle kommentarer. Deretter begynner den å lete i kodebasen, ikke tilfeldig, men målrettet basert på nøkkelord og feilmeldinger fra issue-en.</p>
 
-      <p>Vi har satt opp en PreToolUse-hook som kjøres rett før Claude sender data til et eksternt verktøy. Skriptet scanner teksten og ser etter mønstre som indikerer personopplysninger.</p>
-
+      <!-- TERMINAL -->
     </div>
 
     <div class="terminal">
@@ -519,73 +549,66 @@
         <span class="dot dot-r"></span>
         <span class="dot dot-y"></span>
         <span class="dot dot-g"></span>
-        <span class="terminal-label">pii_hook.py — PreToolUse</span>
+        <span class="terminal-label">claude — prosjekt</span>
       </div>
       <div class="terminal-body">
-        <div><span class="t-step">  → PreToolUse: web_search</span></div>
-        <div><span class="t-out">  ✓ Scanner innhold for PII...</span></div>
-        <div><span class="t-warn">  ADVARSEL: Mulig fødselsnummer funnet: "120476 *****"</span></div>
-        <div><span class="t-warn">  Verktøy blokkert. Gjennomgå forespørselen før du fortsetter.</span></div>
-        <div>&nbsp;</div>
-        <div><span class="t-step">  → PreToolUse: write_file</span></div>
-        <div><span class="t-out">  ✓ Ingen PII funnet</span></div>
-        <div><span class="t-ok">  ✓ Verktøy tillatt</span></div>
+        <div><span class="t-prompt">$</span> <span class="t-cmd">claude "Se på BUG-482 i Jira og fiks den"</span></div>
+        <div><span class="t-step">  → Kobler til Jira MCP...</span></div>
+        <div><span class="t-out">  ✓ Lest BUG-482: NullPointerException i PaymentService.processRefund()</span></div>
+        <div><span class="t-step">  → Søker i kodebase: PaymentService, processRefund...</span></div>
+        <div><span class="t-out">  ✓ Fant: src/services/PaymentService.java, linje 147</span></div>
+        <div><span class="t-step">  → Oppretter branch: fix/BUG-482-payment-null-check</span></div>
+        <div><span class="t-ok">  ✓ Branch opprettet</span></div>
+        <div><span class="t-step">  → Implementerer fix og kjører tester...</span></div>
+        <div><span class="t-out">  ✓ 12/12 tester bestått</span></div>
+        <div><span class="t-step">  → Oppretter PR og linker til BUG-482...</span></div>
+        <div><span class="t-ok">  ✓ PR opprettet: github.com/commit/prosjekt/pull/391</span></div>
       </div>
     </div>
 
     <div class="prose">
 
-      <p>Skriptet er 40 linjer Python og tar under 5 millisekunder å kjøre. Det er raskt nok til at det ikke merkes i normal bruk, men effektivt nok til å stoppe utilsiktet deling av personopplysninger.</p>
+      <p>Trinnene er konsistente fra gang til gang:</p>
 
       <ul>
-        <li>Vi har en pre-tool hook som scanner tekst Claude er i ferd med å sende til et eksternt verktøy</li>
-        <li>Ser etter mønstre som norske fødselsnumre, e-postadresser og telefonnumre</li>
-        <li>Dersom noe matches: Claude stoppes og du får en advarsel</li>
-        <li>Skriptet er 40 linjer Python og tar under 5ms å kjøre</li>
+        <li>Kobler seg til Jira-issue via MCP, leser beskrivelse og kommentarer</li>
+        <li>Søker i kodebasen etter relevant kode med grep og fillesing</li>
+        <li>Lager en ny branch automatisk med et beskrivende navn</li>
+        <li>Implementerer fix og skriver en kort PR-beskrivelse</li>
+        <li>Kjører tester lokalt om de finnes</li>
+        <li>Oppretter PR og linker den til Jira-issue-en</li>
       </ul>
 
-      <h2 id="audit-logging">Audit-logging</h2>
+      <h2 id="hva-vi-holder">Hva vi holder selv</h2>
 
-      <p>En PostToolUse-hook logger alle verktøykall etter at de er utført. Hvert kall skrives til en lokal JSON-fil med tidspunkt, verktøynavn og parametere.</p>
+      <p>Det er et par ting som ikke kan automatiseres bort, og det er greit. Noen vurderinger skal sitte hos et menneske.</p>
 
       <ul>
-        <li>En post-tool hook logger alle verktøykall til en lokal JSON-fil: hvilket verktøy, hvilke parametere, tidspunkt</li>
-        <li>Gir et søkbart spor av hva Claude gjorde i løpet av en sesjon</li>
-        <li>Nyttig når noe går galt og du vil forstå rekkefølgen av hendelser</li>
+        <li>Utvikleren leser og godkjenner kodeendringen</li>
+        <li>Faglig vurdering av om løsningen faktisk er riktig</li>
+        <li>Kontekst som ikke står i issue-en: historikk, designbeslutninger, kjent teknisk gjeld</li>
       </ul>
 
-      <p>I praksis betyr det at du alltid kan gå tilbake og se hva som skjedde. Hvis et skript overskriv en fil du ikke ville ha overskrevet, finner du kallet i loggen, ser nøyaktig hva Claude fikk som input og hvilket kall som ble gjort.</p>
+      <p>Å trykke "merge" er et bevisst valg. Claude lager PR-en, men du bestemmer om den går inn.</p>
 
       <div class="pull-quote">
-        <p>Logging gir deg ikke mindre å gjøre i øyeblikket. Men det gjør det mye enklere å forstå hva som skjedde etterpå.</p>
+        <p>Verktøyet gjør ikke faglig vurdering for deg. Det fjerner friksjon slik at du kan bruke mer tid på det som krever din kunnskap.</p>
       </div>
 
-      <h2 id="agentovervaking">Agentovervaking</h2>
+      <h2 id="viktig-detalj">En liten men viktig detalj</h2>
 
-      <p>Når Claude kjører sub-agenter i parallell kan det være vanskelig å vite hva som foregår. Vi bruker SessionStart- og SessionEnd-hooks til å oppdatere et enkelt dashbord som viser hvilke agenter som kjører og hvor lenge de har kjørt.</p>
-
-      <ul>
-        <li>Vi bruker hooks til å oppdatere et lite dashbord når sub-agenter starter og stopper</li>
-        <li>Det gjør det lett å se om noe har hengt seg opp eller tatt unormalt lang tid</li>
-        <li>Kombinert med logging vet du alltid hva som skjer</li>
-      </ul>
-
-      <p>Det er ikke et avansert overvakningssystem. Det er et enkelt HTML-dashbord som viser en liste med aktive sesjoner og siste kjente status. Nok til at du legger merke til om noe ser rart ut.</p>
-
-      <h2 id="hva-hooks-ikke-er">Hva hooks ikke er</h2>
-
-      <p>Det er greit å si det tydelig: hooks løser ikke alle sikkerhetsspørsmål rundt AI-agenter. De er ett lag i en bredere tilnærming.</p>
+      <p>Claude skriver kode vi fortsatt er ansvarlige for. Det er lett å glemme når den ser riktig ut og testene er grønne.</p>
 
       <ul>
-        <li>De er ikke en erstatning for tilgangsstyring eller nettverksisolasjon</li>
-        <li>De er heller ikke feilfrie, et krasj i hook-skriptet kan blokkere Claude</li>
-        <li>Men de er et godt første lag i forsvar i dybden for AI-agenter</li>
+        <li>Claude skriver kode vi fortsatt er ansvarlige for</li>
+        <li>Vi ser alltid over PR-en før merge</li>
+        <li>Vibe-koding, det vil si å la AI skrive kode du ikke forstår, er en snarvei som skaper teknisk gjeld</li>
       </ul>
 
-      <p>Kombinert med god tilgangsstyring og klare grenser for hva Claude kan gjøre i ditt miljø, gir hooks deg synlighet og kontroll uten å bremse arbeidsflyt merkbart.</p>
+      <p>Vi bruker Claude som en effektiv kollega, ikke som en svart boks. Resultatet er bedre kode og kortere tid fra bug til fix, men ansvaret er fremdeles vårt.</p>
 
       <div class="cta-box">
-        <p>Vi deler gjerne hook-skriptene våre som utgangspunkt. PII-skanneren og audit-loggeren er enkle å tilpasse til din kontekst.</p>
+        <p>Vil du sette opp Claude med Jira i din organisasjon? Vi hjelper gjerne med MCP-konfigurasjon og arbeidsflyt.</p>
         <p>Ta kontakt: <a href="mailto:kopstad@commit.no">kopstad@commit.no</a></p>
       </div>
 
@@ -593,10 +616,10 @@
 
     <div style="margin-top:2.5rem;padding:1.25rem 1.5rem;border:1px solid var(--line);border-radius:8px;background:var(--bg);">
       <div class="author-card-inner" style="display:flex;gap:1rem;align-items:flex-start;">
-        <img src="photo_oystein.jpg" alt="Øystein Kopstad" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+        <img src="../photo_tomas.jpg" alt="Tomas Johansen" style="width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
         <div class="author-info">
-          <h4 style="font-size:0.95rem;font-weight:600;color:var(--ink);margin-bottom:0.35rem;">Øystein Kopstad</h4>
-          <p style="font-size:0.83rem;line-height:1.6;color:var(--ink-soft);margin:0;">Konsulent i Commit AS. Jobber med AI-agenter, MCP-integrasjoner og automatisering av forretningsprosesser.</p>
+          <h4 style="font-size:0.95rem;font-weight:600;color:var(--ink);margin-bottom:0.35rem;">Tomas Johansen</h4>
+          <p style="font-size:0.83rem;line-height:1.6;color:var(--ink-soft);margin:0;">Senior Consultant i Commit AS. Bakgrunn fra embedded systems og fullstack-utvikling. Jobber med systemutvikling og integrasjoner.</p>
         </div>
       </div>
     </div>
@@ -607,13 +630,36 @@
   <aside class="sidebar">
 
     <div class="sidebar-section">
+      <div class="sidebar-label">Serie — Claude Code i praksis</div>
+      <ol class="series-list">
+        <li class="series-item">
+          <a href="blogg-preview.html">
+            <span class="series-del">Del 1</span>
+            Femten minutter fra forespørsel til klart tilbud
+          </a>
+        </li>
+        <li class="series-item current">
+          <a href="blogg-bugfix.html">
+            <span class="series-del">Del 2</span>
+            Bugfix fra A til Å med Claude Code og Jira
+          </a>
+        </li>
+        <li class="series-item">
+          <a href="blogg-datavask.html">
+            <span class="series-del">Del 3</span>
+            Datavask i praksis: fra rådata til strukturert informasjon
+          </a>
+        </li>
+      </ol>
+    </div>
+
+    <div class="sidebar-section">
       <div class="sidebar-label">Innhold</div>
       <ul class="toc">
-        <li><a href="#hva-er-hooks">Hva er hooks, egentlig?</a></li>
-        <li><a href="#pii-skanning">PII-skanning i praksis</a></li>
-        <li><a href="#audit-logging">Audit-logging</a></li>
-        <li><a href="#agentovervaking">Agentovervaking</a></li>
-        <li><a href="#hva-hooks-ikke-er">Hva hooks ikke er</a></li>
+        <li><a href="#kontekstbytte">Fra issue til fix uten kontekstbytte</a></li>
+        <li><a href="#hva-claude-gjor">Hva Claude faktisk gjør</a></li>
+        <li><a href="#hva-vi-holder">Hva vi holder selv</a></li>
+        <li><a href="#viktig-detalj">En liten men viktig detalj</a></li>
       </ul>
     </div>
 
@@ -621,19 +667,19 @@
       <div class="sidebar-label">Temaer</div>
       <div class="tag-list">
         <a href="#" class="tag">Claude Code</a>
-        <a href="#" class="tag">Hooks</a>
-        <a href="#" class="tag">Sikkerhet</a>
-        <a href="#" class="tag">PII</a>
-        <a href="#" class="tag">Logging</a>
-        <a href="#" class="tag">AI-agenter</a>
+        <a href="#" class="tag">Jira</a>
+        <a href="#" class="tag">MCP</a>
+        <a href="#" class="tag">Utvikling</a>
+        <a href="#" class="tag">Bugfix</a>
+        <a href="#" class="tag">Arbeidsflyt</a>
       </div>
     </div>
 
     <div class="sidebar-section">
       <div class="sidebar-label">Om forfatteren</div>
       <div class="sidebar-author">
-        <p><strong>Øystein Kopstad</strong><br/>Konsulent, Commit AS</p>
-        <p>Jobber med AI-agenter, MCP-integrasjoner og automatisering av forretningsprosesser.</p>
+        <p><strong>Tomas Johansen</strong><br/>Senior Consultant, Commit AS</p>
+        <p>Bakgrunn fra embedded systems og fullstack-utvikling. Jobber med systemutvikling og integrasjoner.</p>
       </div>
     </div>
 
@@ -651,15 +697,15 @@
         <h4>Femten minutter fra forespørsel til klart tilbud</h4>
         <span>10. april 2026</span>
       </a>
-      <a href="blogg-bugfix.html" class="related-card">
-        <div class="rc-kicker">Utvikling</div>
-        <h4>Bugfix fra A til Å med Claude Code og Jira</h4>
-        <span>8. april 2026</span>
-      </a>
       <a href="blogg-datavask.html" class="related-card">
         <div class="rc-kicker">Data</div>
         <h4>Datavask i praksis: fra rådata til strukturert informasjon</h4>
         <span>5. april 2026</span>
+      </a>
+      <a href="blogg-hooks.html" class="related-card">
+        <div class="rc-kicker">Sikkerhet</div>
+        <h4>PII-skanning og audit-logging med Claude Hooks</h4>
+        <span>1. april 2026</span>
       </a>
     </div>
   </div>
