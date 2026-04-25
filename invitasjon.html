@@ -416,6 +416,76 @@
       letter-spacing: 0.01em;
     }
     .rsvp-btn:hover { background: var(--blue-dark); }
+    .rsvp-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.8rem;
+      flex-wrap: wrap;
+    }
+    .rsvp-cta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .rsvp-url-inline {
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      font-variant-numeric: tabular-nums;
+    }
+    .rsvp-or-vert {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      font-weight: 700;
+      padding: 0 0.4rem;
+      position: relative;
+    }
+    .rsvp-or-vert::before, .rsvp-or-vert::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      width: 1px;
+      background: var(--line);
+      height: 32px;
+    }
+    .rsvp-or-vert::before { top: 0; transform: translate(-50%, -100%); }
+    .rsvp-or-vert::after { bottom: 0; transform: translate(-50%, 100%); }
+    .rsvp-qr-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.55rem;
+    }
+    .rsvp-qr {
+      display: inline-block;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .rsvp-qr:hover {
+      border-color: var(--blue);
+      box-shadow: 0 4px 18px rgba(43,92,150,0.08);
+    }
+    .rsvp-qr img {
+      display: block;
+      width: 130px;
+      height: 130px;
+    }
+    .rsvp-qr-caption {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      font-weight: 700;
+    }
 
     /* ── FOOTER ── */
     footer {
@@ -460,6 +530,13 @@
       .nav-wrap { padding: 0 1.5rem; gap: 1rem; }
       .logo-lockup { gap: 0.8rem; }
       .nav-meta { font-size: 0.65rem; }
+    }
+
+    @media print {
+      .rsvp {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
     }
   </style>
 </head>
@@ -617,11 +694,23 @@
 <section class="rsvp">
   <h2 class="rsvp-title">Kommer du?</h2>
   <p>
-    Send en rask bekreftelse innen <span class="rsvp-deadline">4. mai</span> så får vi bestilt nok mat og drikke. Ta gjerne med en kollega som kunne hatt nytte av kvelden.
+    Meld deg på innen <span class="rsvp-deadline">4. mai</span> så får vi bestilt nok mat og drikke. Ta gjerne med en kollega som kunne hatt nytte av kvelden.
   </p>
-  <a class="rsvp-btn" href="mailto:kopstad@commit.no?subject=P%C3%A5melding%20fagkveld%205.%20mai&body=Hei!%20Jeg%20kommer%20p%C3%A5%20fagkvelden%205.%20mai.%0A%0ANavn%3A%20%0AGruppe%20(A%2FB%2Fbegge)%3A%20%0AAllergier%20eller%20preferanser%3A%20">
-    Bekreft på e-post
-  </a>
+  <div class="rsvp-actions">
+    <div class="rsvp-cta">
+      <a class="rsvp-btn" href="https://forms.office.com/e/hpmesuW3b8" target="_blank" rel="noopener">
+        Meld deg på
+      </a>
+      <div class="rsvp-url-inline">forms.office.com/e/hpmesuW3b8</div>
+    </div>
+    <div class="rsvp-or-vert"><span>eller</span></div>
+    <div class="rsvp-qr-wrap">
+      <a class="rsvp-qr" href="https://forms.office.com/e/hpmesuW3b8" target="_blank" rel="noopener" aria-label="Påmelding via QR-kode">
+        <img src="assets/images/rsvp_qr.svg" alt="QR-kode til påmeldingsskjema" />
+      </a>
+      <div class="rsvp-qr-caption">skann koden</div>
+    </div>
+  </div>
 </section>
 
 <footer>
