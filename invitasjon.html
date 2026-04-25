@@ -125,8 +125,8 @@
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1.1fr);
+      gap: 1.2rem;
     }
     .fact-label {
       font-size: 0.65rem;
@@ -533,10 +533,20 @@
     }
 
     @media print {
+      @page { margin: 0.5cm; }
+      .hero { padding-top: 3rem; padding-bottom: 2.5rem; }
+      .facts { padding: 1.8rem 2rem; }
+      .content { padding: 2.8rem 2rem 1.5rem; }
+      .partner { margin-top: 1.5rem; }
+      .partner-inner { padding: 1.6rem 2rem 1.4rem; }
+      .partner-desc { margin-bottom: 1.2rem; }
       .rsvp {
+        padding: 2.2rem 2rem 1.6rem;
         page-break-inside: avoid;
         break-inside: avoid;
       }
+      .rsvp p { margin-bottom: 1.6rem; }
+      footer { padding: 1.1rem; font-size: 0.78rem; }
     }
   </style>
 </head>
@@ -557,7 +567,7 @@
   <div class="eyebrow">Fagkveld · 5. mai 2026</div>
   <h1>Slik får vi <span class="italic">mer gjort</span> med AI</h1>
   <p class="hero-ingress">
-    Commit og OFV inviterer til en uformell fagkveld om bruk av AI i jobben, både på business-siden og for utviklere. Vi starter med en felles presentasjon og eksempler fra eget arbeid, deler oss så i to grupper for prat og diskusjon, og avslutter med middag og mingling.
+    Vi inviterer til en intern fagkveld for Commit og OFV. OFV stiller lokalene, Commit kommer med det faglige og serveringen. Kvelden handler om bruk av AI i jobben, både på business-siden og for utviklere. Vi starter med en felles presentasjon, deler oss i to grupper for prat og diskusjon, og avslutter med middag og mingling.
   </p>
 </section>
 
