@@ -532,21 +532,10 @@
       .nav-meta { font-size: 0.65rem; }
     }
 
-    @media print {
-      @page { margin: 0.5cm; }
-      .hero { padding-top: 3rem; padding-bottom: 2.5rem; }
-      .facts { padding: 1.8rem 2rem; }
-      .content { padding: 2.8rem 2rem 1.5rem; }
-      .partner { margin-top: 1.5rem; }
-      .partner-inner { padding: 1.6rem 2rem 1.4rem; }
-      .partner-desc { margin-bottom: 1.2rem; }
-      .rsvp {
-        padding: 2.2rem 2rem 1.6rem;
-        page-break-inside: avoid;
-        break-inside: avoid;
-      }
-      .rsvp p { margin-bottom: 1.6rem; }
-      footer { padding: 1.1rem; font-size: 0.78rem; }
+    /* Single-page PDF — never broken across pages */
+    @page {
+      size: 960px 3000px;
+      margin: 0;
     }
   </style>
 </head>
