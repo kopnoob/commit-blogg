@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <title>Handleliste — Fagkveld 5. mai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #2B5C96;
+      --blue-dark:  #1F4373;
+      --ink:        #1a1a1a;
+      --ink-mid:    #3D3D3D;
+      --ink-soft:   #666666;
+      --line:       #E0DDD6;
+      --line-soft:  #ECE9E2;
+      --bg:         #FAFAF7;
+      --white:      #FFFFFF;
+    }
+
+    html, body {
+      width: 1080px;
+      height: 1620px;
+      overflow: hidden;
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: 1080px;
+      height: 1620px;
+      padding: 60px 70px 50px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+    .header-logos {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .header-logos img.commit { height: 22px; }
+    .header-logos img.ofv { height: 26px; }
+    .header-divider {
+      width: 1px;
+      height: 22px;
+      background: var(--line);
+    }
+    .header-meta {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .header-meta .accent { color: var(--blue); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 36px 0 28px;
+      border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+    .hero-title {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 84px;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 0.98;
+      letter-spacing: -1.5px;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+    .hero-meta {
+      display: flex;
+      gap: 24px;
+      font-size: 14px;
+      color: var(--ink-mid);
+    }
+    .hero-meta .item strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .hero-meta .item-divider {
+      width: 1px;
+      background: var(--line);
+    }
+
+    /* ── BODY ── */
+    .body {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px 50px;
+      padding: 28px 0 0;
+      align-content: start;
+    }
+
+    .section { display: flex; flex-direction: column; }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--blue);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--ink);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .section-label .count {
+      color: var(--ink-soft);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+    }
+
+    .item {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 5px 0;
+      font-size: 13.5px;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+    .item .check {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid var(--ink-soft);
+      border-radius: 2px;
+      flex-shrink: 0;
+      transform: translateY(2px);
+    }
+    .item .name { flex: 1; }
+    .item .qty {
+      font-variant-numeric: tabular-nums;
+      color: var(--ink-soft);
+      font-size: 12.5px;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    /* ── FOOTER NOTE ── */
+    .footnote {
+      margin-top: 24px;
+      padding: 16px 22px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--blue);
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .footnote-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 4px;
+    }
+    .footnote-text {
+      font-size: 13.5px;
+      color: var(--ink-mid);
+      line-height: 1.5;
+    }
+    .footnote-text strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .footnote-text .italic {
+      font-style: italic;
+      color: var(--blue);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="header">
+      <div class="header-logos">
+        <img src="assets/logos/commit_logo.png" alt="Commit" class="commit" />
+        <span class="header-divider"></span>
+        <img src="assets/logos/ofv_logo.svg" alt="OFV" class="ofv" />
+      </div>
+      <div class="header-meta">
+        <span>Handleliste</span> · <span class="accent">Fagkveld 5. mai 2026</span>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-eyebrow">Til 20 personer · Tirsdag 5. mai</div>
+      <h1 class="hero-title">Det vi trenger å handle</h1>
+      <div class="hero-meta">
+        <div class="item"><strong>Faglig del</strong> 17:00 – 19:00 hos OFV</div>
+        <div class="item-divider"></div>
+        <div class="item"><strong>Middag</strong> ute på Den Glade Gris</div>
+      </div>
+    </div>
+
+    <div class="body">
+
+      <!-- VENSTRE KOLONNE -->
+
+      <div class="section">
+        <div class="section-label"><span>Drikke</span><span class="count">til 17–19</span></div>
+        <div class="item"><span class="check"></span><span class="name">Pils (Hansa eller Ringnes)</span><span class="qty">3 sekspakk</span></div>
+        <div class="item"><span class="check"></span><span class="name">IPA eller hveteøl</span><span class="qty">1 sekspakk</span></div>
+        <div class="item"><span class="check"></span><span class="name">Alkoholfri øl (Munkholm el. l.)</span><span class="qty">1 sekspakk</span></div>
+        <div class="item"><span class="check"></span><span class="name">Rødvin</span><span class="qty">2 flasker</span></div>
+        <div class="item"><span class="check"></span><span class="name">Hvitvin</span><span class="qty">2 flasker</span></div>
+        <div class="item"><span class="check"></span><span class="name">Cola, gjerne én Zero</span><span class="qty">2 × 1,5 L</span></div>
+        <div class="item"><span class="check"></span><span class="name">Solo eller Sprite</span><span class="qty">1 × 1,5 L</span></div>
+        <div class="item"><span class="check"></span><span class="name">Eplemost eller juice</span><span class="qty">1 × 1,5 L</span></div>
+        <div class="item"><span class="check"></span><span class="name">Vann med kullsyre</span><span class="qty">3 × 1,5 L</span></div>
+        <div class="item"><span class="check"></span><span class="name">Vann uten kullsyre</span><span class="qty">2 × 1,5 L</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-label"><span>Frukt og grønt</span></div>
+        <div class="item"><span class="check"></span><span class="name">Druer</span><span class="qty">1 kg</span></div>
+        <div class="item"><span class="check"></span><span class="name">Bær (jordbær eller blåbær)</span><span class="qty">500 g</span></div>
+        <div class="item"><span class="check"></span><span class="name">Epler</span><span class="qty">6 stk</span></div>
+        <div class="item"><span class="check"></span><span class="name">Klementiner</span><span class="qty">1 nett</span></div>
+        <div class="item"><span class="check"></span><span class="name">Cherrytomater</span><span class="qty">1 boks</span></div>
+        <div class="item"><span class="check"></span><span class="name">Gulrøtter (snack-størrelse)</span><span class="qty">1 pose</span></div>
+        <div class="item"><span class="check"></span><span class="name">Paprika (rød og gul)</span><span class="qty">3 stk</span></div>
+        <div class="item"><span class="check"></span><span class="name">Agurk</span><span class="qty">1 stk</span></div>
+      </div>
+
+      <!-- HØYRE KOLONNE -->
+
+      <div class="section">
+        <div class="section-label"><span>Snacks og pålegg</span></div>
+        <div class="item"><span class="check"></span><span class="name">Blandede nøtter (cashew, mandler)</span><span class="qty">500 g</span></div>
+        <div class="item"><span class="check"></span><span class="name">Salt-peanøtter</span><span class="qty">200 g</span></div>
+        <div class="item"><span class="check"></span><span class="name">Oliven</span><span class="qty">2 bokser</span></div>
+        <div class="item"><span class="check"></span><span class="name">Tortilla-chips</span><span class="qty">2 poser</span></div>
+        <div class="item"><span class="check"></span><span class="name">Salsa eller guacamole</span><span class="qty">1 boks</span></div>
+        <div class="item"><span class="check"></span><span class="name">Hummus</span><span class="qty">2 bokser</span></div>
+        <div class="item"><span class="check"></span><span class="name">Salt-kjeks eller knekkebrød</span><span class="qty">2 pakker</span></div>
+        <div class="item"><span class="check"></span><span class="name">Sjokolade til etter middag</span><span class="qty">2 plater</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-label"><span>Praktisk og utstyr</span></div>
+        <div class="item"><span class="check"></span><span class="name">Pappkrus til vann og kaffe</span><span class="qty">40 stk</span></div>
+        <div class="item"><span class="check"></span><span class="name">Engangs vinglass</span><span class="qty">25 stk</span></div>
+        <div class="item"><span class="check"></span><span class="name">Servietter</span><span class="qty">100 stk</span></div>
+        <div class="item"><span class="check"></span><span class="name">Småtallerkener</span><span class="qty">25 stk</span></div>
+        <div class="item"><span class="check"></span><span class="name">Søppelposer</span><span class="qty">4 stk</span></div>
+        <div class="item"><span class="check"></span><span class="name">Kjøkkenrull</span><span class="qty">1 rull</span></div>
+        <div class="item"><span class="check"></span><span class="name">Korketrekker og flaskeåpner</span></div>
+        <div class="item"><span class="check"></span><span class="name">Navnelapper og tusj</span></div>
+        <div class="item"><span class="check"></span><span class="name">Post-its og whiteboard-tusj</span></div>
+        <div class="item"><span class="check"></span><span class="name">HDMI- eller USB-C-adapter</span></div>
+        <div class="item"><span class="check"></span><span class="name">Lader (USB-C og Lightning)</span></div>
+      </div>
+
+    </div>
+
+    <div class="footnote">
+      <div class="footnote-label">Husk</div>
+      <div class="footnote-text">
+        Middagen tas ute på <strong>Den Glade Gris</strong> etter den faglige delen. <span class="italic">Bestill bord i god tid</span> for ~20 personer en tirsdag, og sjekk allergier i påmeldings-skjemaet før dere går.
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
