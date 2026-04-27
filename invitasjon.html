@@ -532,11 +532,8 @@
       .nav-meta { font-size: 0.65rem; }
     }
 
-    /* Single-page PDF — never broken across pages */
-    @page {
-      size: 960px 3000px;
-      margin: 0;
-    }
+    /* PDF-genereres via Playwright med auto-tilpasset sidehøyde,
+       så vi trenger ikke statisk @page-størrelse her. */
   </style>
 </head>
 <body>
